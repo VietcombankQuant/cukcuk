@@ -49,7 +49,7 @@ class LoginSession:
         record = handle_response(resp)
         branch = Branch()
         for key, value in record.items():
-            if key in branch.__dict__:
+            if key in branch.column_names():
                 branch.__dict__[key] = value
 
         return branch

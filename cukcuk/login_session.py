@@ -24,7 +24,7 @@ class LoginSession:
             raise Exception("Must login before retrieving access token")
         return self.__access_token
 
-    def get_all_branches(self) -> list[Branch]:
+    def get_all_branches(self, details=True) -> list[Branch]:
         url = f"{BASE_URL}/api/v1/branchs/all"
         resp = requests.get(
             url,
@@ -35,6 +35,7 @@ class LoginSession:
             raise Exception(
                 f"Failed to fetch branch list with HTTP code {resp.status_code}"
             )
+
         try:
             message = json.loads(resp.text)
         except json.JSONDecodeError as err:
@@ -53,14 +54,43 @@ class LoginSession:
         branches = []
         records = message.get("Data", [{}])
         for record in records:
-            branch = Branch()
-            for key, value in record.items():
-                if key in branch.__dict__:
-                    branch.__dict__[key] = value
-
-            branches.append(branch)
+            branch_id = record.get("Id", None)
+            if branch_id != None:
+                branch = self.__get_branch_detail(branch_id)
+                branches.append(branch)
 
         return branches
+
+    def __get_branch_detail(self, branch_id: str) -> Branch:
+        url = f"{BASE_URL}/api/v1/branchs/setting/{branch_id}"
+        resp = requests.get(url, headers=self.__auth_headers)
+        if not resp.ok:
+            raise Exception(
+                f"Failed to fetch branch {branch_id} with HTTP code {resp.status_code}"
+            )
+
+        try:
+            message = json.loads(resp.text)
+        except json.JSONDecodeError as err:
+            raise Exception(
+                f"Failed to decode response from url {url} with error {err.msg}"
+            )
+
+        if not message.get("Success", False):
+            raise Exception(
+                f"Failed to get branch detail from {url} with error "
+                f"HTTP code: {message.get('Code','')} - "
+                f"ErrorType: {message.get('ErrorType','')} - "
+                f"ErrorMessage: {message.get('ErrorMessage','')}"
+            )
+
+        branch = Branch()
+        record = message.get("Data", {})
+        for key, value in record.items():
+            if key in branch.__dict__:
+                branch.__dict__[key] = value
+
+        return branch
 
     @property
     def __signature(self):

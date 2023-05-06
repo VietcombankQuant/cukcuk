@@ -9,10 +9,10 @@ from .common import BASE_URL
 
 
 class LoginSession:
-    def __init__(self, *, app_id, domain, secrets):
+    def __init__(self, *, app_id, domain, secret_key):
         self.app_id = app_id
         self.domain = domain
-        self.secrets = secrets
+        self.secret_key = secret_key
         self.login_time = datetime.now(pytz.UTC)
         self.__access_token = None
         self.__login()
@@ -21,7 +21,7 @@ class LoginSession:
     def __signature(self):
         message = json.dumps(self.__info_no_signature, separators=(",", ":"))
         signature = hmac.new(
-            key=self.secrets.encode("utf-8"),
+            key=self.secret_key.encode("utf-8"),
             msg=message.encode("utf-8"),
             digestmod=hashlib.sha256
         )

@@ -5,7 +5,7 @@ from datetime import datetime
 import pytz
 import requests
 
-from .common import BASE_URL
+from .common import BASE_URL, handle_response
 from .branch import Branch
 
 
@@ -31,28 +31,9 @@ class LoginSession:
             headers=self.__auth_headers,
             params={"includeInactive": True}
         )
-        if not resp.ok:
-            raise Exception(
-                f"Failed to fetch branch list with HTTP code {resp.status_code}"
-            )
 
-        try:
-            message = json.loads(resp.text)
-        except json.JSONDecodeError as err:
-            raise Exception(
-                f"Failed to decode response from url {url} with error {err.msg}"
-            )
-
-        if not message.get("Success", False):
-            raise Exception(
-                f"Failed to request branch list from {url} with error "
-                f"HTTP code: {message.get('Code','')} - "
-                f"ErrorType: {message.get('ErrorType','')} - "
-                f"ErrorMessage: {message.get('ErrorMessage','')}"
-            )
-
+        records = handle_response(resp)
         branches = []
-        records = message.get("Data", [{}])
         for record in records:
             branch_id = record.get("Id", None)
             if branch_id != None:
@@ -64,28 +45,9 @@ class LoginSession:
     def __get_branch_detail(self, branch_id: str) -> Branch:
         url = f"{BASE_URL}/api/v1/branchs/setting/{branch_id}"
         resp = requests.get(url, headers=self.__auth_headers)
-        if not resp.ok:
-            raise Exception(
-                f"Failed to fetch branch {branch_id} with HTTP code {resp.status_code}"
-            )
 
-        try:
-            message = json.loads(resp.text)
-        except json.JSONDecodeError as err:
-            raise Exception(
-                f"Failed to decode response from url {url} with error {err.msg}"
-            )
-
-        if not message.get("Success", False):
-            raise Exception(
-                f"Failed to get branch detail from {url} with error "
-                f"HTTP code: {message.get('Code','')} - "
-                f"ErrorType: {message.get('ErrorType','')} - "
-                f"ErrorMessage: {message.get('ErrorMessage','')}"
-            )
-
+        record = handle_response(resp)
         branch = Branch()
-        record = message.get("Data", {})
         for key, value in record.items():
             if key in branch.__dict__:
                 branch.__dict__[key] = value

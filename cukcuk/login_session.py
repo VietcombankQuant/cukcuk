@@ -7,6 +7,7 @@ import requests
 
 from .common import BASE_URL, handle_response
 from .branch import Branch
+from .invoice import Invoice
 
 
 class LoginSession:
@@ -41,6 +42,26 @@ class LoginSession:
                 branches.append(branch)
 
         return branches
+
+    def get_invoice_list(self, branch: Branch, page: int, limit: int = 100, last_sync_date: datetime = None) -> list[Branch]:
+        url = f"{BASE_URL}/api/v1/sainvoices/paging"
+        if last_sync_date == None:
+            last_sync_date = datetime.today()
+        payload = {
+            "Page": page,
+            "Limit": limit,
+            "BranchId": branch.Id,
+            "LastSyncDate": last_sync_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "HaveCustomer": True,
+        }
+        resp = requests.post(url, headers=self.__auth_headers, json=payload)
+        message = handle_response(resp)
+        return message
+
+    def get_invoice(self, invoice_ref: str) -> Invoice:
+        url = f"{BASE_URL}/api/v1/sainvoices/{invoice_ref}"
+        resp = requests.get(url, headers=self.__auth_headers)
+        message = handle_response(resp)
 
     def __get_branch_detail(self, branch_id: str) -> Branch:
         url = f"{BASE_URL}/api/v1/branchs/setting/{branch_id}"

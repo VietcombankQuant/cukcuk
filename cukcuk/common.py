@@ -14,6 +14,11 @@ class SqlTableBase(DeclarativeBase):
 
 
 class SqlTableMixin:
+    def __init__(self):
+        super().__init__()
+        for column in self.column_names():
+            self.__dict__[column] = None
+
     @classmethod
     def this_table(self) -> SqlTable:
         return self.metadata.tables[self.__tablename__]

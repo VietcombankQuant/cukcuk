@@ -18,6 +18,12 @@ class LoginSession:
         self.__login()
 
     @property
+    def access_token(self):
+        if self.__access_token == None:
+            raise Exception("Must login before retrieving access token")
+        return self.__access_token
+
+    @property
     def __signature(self):
         message = json.dumps(self.__info_no_signature, separators=(",", ":"))
         signature = hmac.new(
@@ -34,12 +40,6 @@ class LoginSession:
             "Domain": self.domain,
             "LoginTime": self.login_time.strftime("%Y-%m-%dT%H:%M:%SZ")
         }
-
-    @property
-    def access_token(self):
-        if self.__access_token == None:
-            raise Exception("Must login before retrieving access token")
-        return self.__access_token
 
     def __login(self):
         url = f"{BASE_URL}/api/Account/Login"

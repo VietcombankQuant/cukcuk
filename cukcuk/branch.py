@@ -3,6 +3,9 @@ from dataclasses import dataclass
 
 @dataclass
 class Branch:
+    """
+    Read more: https://graphapi.cukcuk.vn/document/api/branchs_setting.html#branch-definition
+    """
     Id:	str = None
     Code: str = None
     Name: str = None

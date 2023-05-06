@@ -7,17 +7,18 @@ import requests
 
 from .common import BASE_URL
 
+
 class LoginSession:
     def __init__(self, *, app_id, domain, secrets):
         self.app_id = app_id
         self.domain = domain
         self.secrets = secrets
-        self.__access_token = None
         self.login_time = datetime.now(pytz.UTC)
-        self.login()
+        self.__access_token = None
+        self.__login()
 
     @property
-    def signature(self):
+    def __signature(self):
         message = json.dumps(self.__info_no_signature, separators=(",", ":"))
         signature = hmac.new(
             key=self.secrets.encode("utf-8"),
@@ -40,10 +41,10 @@ class LoginSession:
             raise Exception("Must login before retrieving access token")
         return self.__access_token
 
-    def login(self):
+    def __login(self):
         url = f"{BASE_URL}/api/Account/Login"
         payload = self.__info_no_signature
-        payload["SignatureInfo"] = self.signature
+        payload["SignatureInfo"] = self.__signature
         resp = requests.post(url, json=payload)
         if not resp.ok:
             raise Exception(

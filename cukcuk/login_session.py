@@ -5,8 +5,7 @@ from datetime import datetime
 import pytz
 import requests
 
-BASE_URL = "https://graphapi.cukcuk.vn"
-
+from .common import BASE_URL
 
 class LoginSession:
     def __init__(self, *, app_id, domain, secrets):

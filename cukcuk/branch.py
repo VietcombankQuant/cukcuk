@@ -1,9 +1,9 @@
 from .common import SqlTableBase, SqlTableMixin
-from sqlalchemy.orm import Mapped, mapped_column, MappedAsDataclass
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String as SqlString, Boolean as SqlBool, Float as SqlFloat
 
 
-class Branch(SqlTableBase, SqlTableMixin, MappedAsDataclass):
+class Branch(SqlTableBase, SqlTableMixin):
     """
     Read more: https://graphapi.cukcuk.vn/document/api/branchs_setting.html#branch-definition
     """

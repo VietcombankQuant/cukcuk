@@ -2,6 +2,7 @@ from sqlalchemy.sql.schema import Table as SqlTable
 from sqlalchemy import Engine as SqlEngine, Connection as SqlConnection
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Session as SqlSession
+from sqlalchemy.exc import IntegrityError as SqlIntegrityError
 import requests
 import json
 from http.client import responses as http_responses
@@ -21,7 +22,11 @@ class SqlTableMixin:
             self.__dict__[column] = None
 
     def save(self, session: SqlSession):
-        session.add(self)
+        key_names = [col.key for col in self.__table__.primary_key.columns]
+        primary_keys = [self.__dict__.get(key) for key in key_names]
+        existing_obj = session.get(self.__class__, ident=primary_keys)
+        if existing_obj == None:
+            session.add(self)
 
     @classmethod
     def this_table(self) -> SqlTable:

@@ -199,17 +199,24 @@ class Invoice(SqlTableBase, SqlTableMixin):
 
     def save(self, session: SqlSession):
         super().save(session)
-        if self.SAInvoiceDetails != None:
-            session.add_all(self.SAInvoiceDetails)
 
-        if self.SAInvoicePayments != None:
-            session.add_all(self.SAInvoicePayments)
+        details = self.SAInvoiceDetails
+        if details != None:
+            for detail in details:
+                detail.save(session)
 
-        if self.SAInvoiceCoupons != None:
-            session.add_all(self.SAInvoiceCoupons)
+        payments = self.SAInvoicePayments
+        if payments != None:
+            for payment in payments:
+                payment.save(session)
+
+        coupons = self.SAInvoiceCoupons
+        if coupons != None:
+            for coupon in coupons:
+                coupon.save(session)
 
         if self.SAVATInfo != None:
-            session.add(self.SAVATInfo)
+            self.SAVATInfo.save(session)
 
     @classmethod
     def deserialize(cls, record: dict | list):

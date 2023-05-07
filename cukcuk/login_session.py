@@ -16,6 +16,7 @@ class LoginSession:
         self.domain = domain
         self.secret_key = secret_key
         self.login_time = datetime.now(pytz.UTC)
+        self.__api_client = None
         self.__access_token = None
         self.__login()
 
@@ -25,13 +26,16 @@ class LoginSession:
             raise Exception("Must login before retrieving access token")
         return self.__access_token
 
+    @property
+    def api_client(self) -> requests.Session:
+        if self.__api_client == None:
+            self.__api_client = requests.Session()
+            self.__api_client.headers.update(self.__auth_headers)
+        return self.__api_client
+
     def get_all_branches(self, details=True) -> list[Branch]:
         url = f"{BASE_URL}/api/v1/branchs/all"
-        resp = requests.get(
-            url,
-            headers=self.__auth_headers,
-            params={"includeInactive": True}
-        )
+        resp = self.api_client.get(url, params={"includeInactive": True})
 
         records = handle_response(resp)
         branches = []
@@ -54,7 +58,7 @@ class LoginSession:
             "LastSyncDate": last_sync_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
             "HaveCustomer": True,
         }
-        resp = requests.post(url, headers=self.__auth_headers, json=payload)
+        resp = self.api_client.post(url, json=payload)
         records = handle_response(resp)
 
         invoices = []
@@ -68,12 +72,12 @@ class LoginSession:
     def get_invoice(self, invoice_ref: str) -> Invoice:
         # get basic invoice info
         url = f"{BASE_URL}/api/v1/sainvoices/{invoice_ref}"
-        resp = requests.get(url, headers=self.__auth_headers)
+        resp = self.api_client.get(url)
         record = handle_response(resp)
 
         # get detail info of invoice
         url = f"{BASE_URL}/api/v1/sainvoices/detail/{invoice_ref}"
-        resp = requests.get(url, headers=self.__auth_headers)
+        resp = self.api_client.get(url)
         details = handle_response(resp)
         record.update(details)
         invoice = Invoice.deserialize(record)
@@ -81,7 +85,7 @@ class LoginSession:
 
     def __get_branch_detail(self, branch_id: str) -> Branch:
         url = f"{BASE_URL}/api/v1/branchs/setting/{branch_id}"
-        resp = requests.get(url, headers=self.__auth_headers)
+        resp = self.api_client.get(url)
 
         record = handle_response(resp)
         branch = Branch.deserialize(record)

@@ -1,6 +1,7 @@
 from sqlalchemy.sql.schema import Table as SqlTable
 from sqlalchemy import Engine as SqlEngine, Connection as SqlConnection
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import Session as SqlSession
 import requests
 import json
 from http.client import responses as http_responses
@@ -19,9 +20,16 @@ class SqlTableMixin:
         for column in self.column_names():
             self.__dict__[column] = None
 
+    def save(self, session: SqlSession):
+        session.add(self)
+
     @classmethod
     def this_table(self) -> SqlTable:
         return self.__table__
+
+    @classmethod
+    def relationship_names(cls) -> list[str]:
+        return [rel.key for rel in cls.__mapper__.relationships]
 
     @classmethod
     def column_names(cls) -> list[str]:

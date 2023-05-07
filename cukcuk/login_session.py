@@ -20,6 +20,13 @@ class LoginSession:
         self.__access_token = None
         self.__login()
 
+    @classmethod
+    def from_json(cls, file_path: str):
+        with open(file_path, "r") as f:
+            json_data = f.read()
+            kwargs = json.loads(json_data)
+            return cls(**kwargs)
+
     @property
     def access_token(self):
         if self.__access_token == None:

@@ -1,10 +1,11 @@
 import sqlalchemy
 from sqlalchemy.orm import Session as SqlSession
-
+from .common import SqlTableBase
 
 class Storage:
     def __init__(self, db_url: str):
         engine = sqlalchemy.create_engine(url=db_url)
+        SqlTableBase.metadata.create_all(engine)
         self.__session = SqlSession(engine)
 
     def save(self, objects):

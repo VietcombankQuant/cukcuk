@@ -1,6 +1,6 @@
 from typing import Any, Union
 from .common import SqlTableBase, SqlTableMixin
-from sqlalchemy.orm import mapped_column, mapped_collection, relationship
+from sqlalchemy.orm import Session as SqlSession, mapped_column, mapped_collection, relationship
 from sqlalchemy import String as SqlString, Boolean as SqlBool, Float as SqlFloat, Integer as SqlInt, ForeignKey
 
 
@@ -39,7 +39,7 @@ class InvoiceDetail(SqlTableBase, SqlTableMixin):
     __tablename__ = "invoice_details"
 
     RefDetailId = mapped_column(SqlString, primary_key=True)
-    RefID = mapped_column(SqlString)
+    RefID = mapped_column(SqlString, ForeignKey("invoices.RefId"))
     RefDetailType = mapped_column(SqlInt)
     ItemID = mapped_column(SqlString)
     ItemName = mapped_column(SqlString)
@@ -79,7 +79,7 @@ class InvoicePayment(SqlTableBase, SqlTableMixin):
     __tablename__ = "invoice_payments"
 
     SAInvoicePaymentID = mapped_column(SqlString, primary_key=True)
-    RefID = mapped_column(SqlString)
+    RefID = mapped_column(SqlString, ForeignKey("invoices.RefId"))
     RefNo = mapped_column(SqlString)
     PaymentType = mapped_column(SqlInt)
     Amount = mapped_column(SqlFloat)
@@ -116,7 +116,7 @@ class InvoiceCoupon(SqlTableBase, SqlTableMixin):
     __tablename__ = "invoice_coupons"
 
     SAInvoiceCouponID = mapped_column(SqlString, primary_key=True)
-    RefID = mapped_column(SqlString)
+    RefID = mapped_column(SqlString, ForeignKey("invoices.RefId"))
     CouponID = mapped_column(SqlString)
     CouponCode = mapped_column(SqlString)
     DiscountType = mapped_column(SqlInt)
@@ -188,14 +188,28 @@ class Invoice(SqlTableBase, SqlTableMixin):
     AvailablePoint = mapped_column(SqlInt)
     UsedPoint = mapped_column(SqlInt)
     AddPoint = mapped_column(SqlInt)
-    SAInvoiceDetails = mapped_collection(InvoiceDetail)
-    SAInvoicePayments = mapped_collection(InvoicePayment)
-    SAInvoiceCoupons = mapped_collection(InvoiceCoupon)
+    SAInvoiceDetails = relationship(InvoiceDetail)
+    SAInvoicePayments = relationship(InvoicePayment)
+    SAInvoiceCoupons = relationship(InvoiceCoupon)
     SAVATInfo = relationship(VATInfo, uselist=False)
 
     def __init__(self):
         super().__init__()
         self.SAInvoiceDetails = []
+
+    def save(self, session: SqlSession):
+        super().save(session)
+        if self.SAInvoiceDetails != None:
+            session.add_all(self.SAInvoiceDetails)
+
+        if self.SAInvoicePayments != None:
+            session.add_all(self.SAInvoicePayments)
+
+        if self.SAInvoiceCoupons != None:
+            session.add_all(self.SAInvoiceCoupons)
+
+        if self.SAVATInfo != None:
+            session.add(self.SAVATInfo)
 
     @classmethod
     def deserialize(cls, record: dict | list):

@@ -207,21 +207,25 @@ class Invoice(SqlTableBase, SqlTableMixin):
         self = super().deserialize(record)
 
         invoice_detail_records = record.get("SAInvoiceDetails", [])
-        self.SAInvoiceDetails = InvoiceDetail.deserialize(
-            invoice_detail_records
-        )
+        if len(invoice_detail_records) > 0:
+            self.SAInvoiceDetails = InvoiceDetail.deserialize(
+                invoice_detail_records
+            )
 
         invoice_payment_records = record.get("SAInvoicePayments", [])
-        self.SAInvoicePayments = InvoicePayment.deserialize(
-            invoice_payment_records
-        )
+        if len(invoice_payment_records) > 0:
+            self.SAInvoicePayments = InvoicePayment.deserialize(
+                invoice_payment_records
+            )
 
         invoice_coupon_record = record.get("SAInvoiceCoupons", [])
-        self.SAInvoiceCoupons = InvoiceCoupon.deserialize(
-            invoice_coupon_record
-        )
+        if len(invoice_coupon_record) > 0:
+            self.SAInvoiceCoupons = InvoiceCoupon.deserialize(
+                invoice_coupon_record
+            )
 
         vat_info_record = record.get("SAVATInfo", {})
-        self.SAVATInfo = VATInfo.deserialize(vat_info_record)
+        if len(vat_info_record) > 0:
+            self.SAVATInfo = VATInfo.deserialize(vat_info_record)
 
         return self

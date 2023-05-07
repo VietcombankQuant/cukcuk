@@ -2,7 +2,6 @@
 name = "cukcuk"
 version = "0.1.0"
 description = "Connect to Cukcuk Shop API"
-license = "MIT"
 authors = ["Minh Bui <buiducminh287@gmail.com>"]
 packages = [{ include = "cukcuk" }, { include = "cukcuk/*.py" }]
 dependencies = ["requests ~= 2", "sqlalchemy ~= 2", "pytz"]

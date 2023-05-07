@@ -21,7 +21,7 @@ class SqlTableMixin:
 
     @classmethod
     def this_table(self) -> SqlTable:
-        return self.metadata.tables[self.__tablename__]
+        return self.__table__
 
     @classmethod
     def column_names(cls) -> list[str]:
@@ -30,6 +30,19 @@ class SqlTableMixin:
     @classmethod
     def create_table(cls, engine: Union[SqlEngine, SqlConnection]):
         cls.this_table.create(engine)
+
+    @classmethod
+    def deserialize(cls, record: Union[dict, list]):
+        # record is of type list
+        if type(record) == list:
+            return [cls.deserialize(item) for item in record]
+
+        # record is of type dict
+        result = cls()
+        for key, value in record.items():
+            if key in cls.column_names():
+                result.__dict__[key] = value
+        return result
 
     def __repr__(self) -> str:
         fields = {}

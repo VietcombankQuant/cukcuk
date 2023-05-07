@@ -66,9 +66,16 @@ class LoginSession:
         return invoices
 
     def get_invoice(self, invoice_ref: str) -> Invoice:
+        # get basic invoice info
         url = f"{BASE_URL}/api/v1/sainvoices/{invoice_ref}"
         resp = requests.get(url, headers=self.__auth_headers)
         record = handle_response(resp)
+
+        # get detail info of invoice
+        url = f"{BASE_URL}/api/v1/sainvoices/detail/{invoice_ref}"
+        resp = requests.get(url, headers=self.__auth_headers)
+        details = handle_response(resp)
+        record.update(details)
         invoice = Invoice.deserialize(record)
         return invoice
 

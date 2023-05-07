@@ -1,7 +1,7 @@
-from typing import Any
+from typing import Any, Union
 from .common import SqlTableBase, SqlTableMixin
-from sqlalchemy.orm import mapped_column, mapped_collection
-from sqlalchemy import String as SqlString, Boolean as SqlBool, Float as SqlFloat, Integer as SqlInt
+from sqlalchemy.orm import mapped_column, mapped_collection, relationship
+from sqlalchemy import String as SqlString, Boolean as SqlBool, Float as SqlFloat, Integer as SqlInt, ForeignKey
 
 
 class VATInfo(SqlTableBase, SqlTableMixin):
@@ -12,7 +12,7 @@ class VATInfo(SqlTableBase, SqlTableMixin):
     __tablename__ = "vat_info"
 
     VATID = mapped_column(SqlString, primary_key=True)
-    RefID = mapped_column(SqlString)
+    RefID = mapped_column(SqlString, ForeignKey("invoices.RefId"))
     ReceiverEIvoiceName = mapped_column(SqlString)
     Tel = mapped_column(SqlString)
     CompanyName = mapped_column(SqlString)
@@ -191,8 +191,37 @@ class Invoice(SqlTableBase, SqlTableMixin):
     SAInvoiceDetails = mapped_collection(InvoiceDetail)
     SAInvoicePayments = mapped_collection(InvoicePayment)
     SAInvoiceCoupons = mapped_collection(InvoiceCoupon)
-    SAVATInfo = mapped_collection(VATInfo)
+    SAVATInfo = relationship(VATInfo, uselist=False)
 
     def __init__(self):
         super().__init__()
         self.SAInvoiceDetails = []
+
+    @classmethod
+    def deserialize(cls, record: dict | list):
+        # record is of type list
+        if type(record) == list:
+            return [cls.deserialize(item) for item in record]
+
+        # record is of type dict
+        self = super().deserialize(record)
+
+        invoice_detail_records = record.get("SAInvoiceDetails", [])
+        self.SAInvoiceDetails = InvoiceDetail.deserialize(
+            invoice_detail_records
+        )
+
+        invoice_payment_records = record.get("SAInvoicePayments", [])
+        self.SAInvoicePayments = InvoicePayment.deserialize(
+            invoice_payment_records
+        )
+
+        invoice_coupon_record = record.get("SAInvoiceCoupons", [])
+        self.SAInvoiceCoupons = InvoiceCoupon.deserialize(
+            invoice_coupon_record
+        )
+
+        vat_info_record = record.get("SAVATInfo", {})
+        self.SAVATInfo = VATInfo.deserialize(vat_info_record)
+
+        return self

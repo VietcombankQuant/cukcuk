@@ -55,24 +55,29 @@ class LoginSession:
             "HaveCustomer": True,
         }
         resp = requests.post(url, headers=self.__auth_headers, json=payload)
-        message = handle_response(resp)
-        return message
+        records = handle_response(resp)
+
+        invoices = []
+        for record in records:
+            invoice_ref = record.get("RefId", "")
+            invoice = self.get_invoice(invoice_ref)
+            invoices.append(invoice)
+
+        return invoices
 
     def get_invoice(self, invoice_ref: str) -> Invoice:
         url = f"{BASE_URL}/api/v1/sainvoices/{invoice_ref}"
         resp = requests.get(url, headers=self.__auth_headers)
-        message = handle_response(resp)
+        record = handle_response(resp)
+        invoice = Invoice.deserialize(record)
+        return invoice
 
     def __get_branch_detail(self, branch_id: str) -> Branch:
         url = f"{BASE_URL}/api/v1/branchs/setting/{branch_id}"
         resp = requests.get(url, headers=self.__auth_headers)
 
         record = handle_response(resp)
-        branch = Branch()
-        for key, value in record.items():
-            if key in branch.column_names():
-                branch.__dict__[key] = value
-
+        branch = Branch.deserialize(record)
         return branch
 
     @property

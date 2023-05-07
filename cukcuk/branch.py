@@ -1,5 +1,5 @@
 from .common import SqlTableBase, SqlTableMixin
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import mapped_column
 from sqlalchemy import String as SqlString, Boolean as SqlBool, Float as SqlFloat
 
 

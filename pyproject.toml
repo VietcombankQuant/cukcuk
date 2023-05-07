@@ -1,6 +1,6 @@
 [project]
 name = "cukcuk"
-version = "0.1.0"
+version = "0.2.0"
 description = "Connect to Cukcuk Shop API"
 authors = [{ name = "Minh Bui", email = "buiducminh287@gmail.com" }]
 dependencies = ["requests >= 2", "sqlalchemy >= 2", "pytz"]

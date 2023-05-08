@@ -3,6 +3,7 @@ from sqlalchemy import Engine as SqlEngine, Connection as SqlConnection
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Session as SqlSession
 from sqlalchemy.exc import IntegrityError as SqlIntegrityError
+import aiohttp
 import requests
 import json
 from http.client import responses as http_responses
@@ -74,6 +75,33 @@ def handle_response(resp: requests.Response) -> Union[dict, list]:
 
     try:
         message = json.loads(resp.text)
+    except json.JSONDecodeError as err:
+        raise Exception(
+            f"Failed to decode response from url {resp.url} with error {err.msg}"
+        )
+
+    if not message.get("Success", False):
+        raise Exception(
+            f"Failed to request branch list from {resp.url} with error "
+            f"HTTP code: {message.get('Code','')} - "
+            f"ErrorType: {message.get('ErrorType','')} - "
+            f"ErrorMessage: {message.get('ErrorMessage','')}"
+        )
+
+    data = message["Data"]
+    return data
+
+
+async def handle_response_async(resp: aiohttp.ClientResponse) -> Union[dict, list]:
+    if not resp.ok:
+        raise Exception(
+            f"Failed to send {resp.request.method} request to {resp.url} "
+            f"with HTTP code {resp.status_code} - {http_responses[resp.status_code]}"
+        )
+
+    content = await resp.text()
+    try:
+        message = json.loads(content)
     except json.JSONDecodeError as err:
         raise Exception(
             f"Failed to decode response from url {resp.url} with error {err.msg}"

@@ -16,7 +16,6 @@ class LoginSession:
         self.domain = domain
         self.secret_key = secret_key
         self.login_time = datetime.now(pytz.UTC)
-        self.__api_client = None
         self.__access_token = None
         self.__login()
 
@@ -35,7 +34,7 @@ class LoginSession:
 
     @property
     def api_client(self) -> requests.Session:
-        if self.__api_client == None:
+        if "__api_client" not in self.__dict__:
             self.__api_client = requests.Session()
             self.__api_client.headers.update(self.__auth_headers)
         return self.__api_client

@@ -71,8 +71,7 @@ class AsyncLoginSession(LoginSession):
                     task = self.get_invoice(invoice_ref)
                     tasks.append(task)
 
-        branches = await asyncio.gather(*tasks)
-        return branches
+        return await asyncio.gather(*tasks)
 
     async def get_invoice(self, invoice_ref: str) -> Invoice:
         async with self.api_client() as client:

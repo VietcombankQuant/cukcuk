@@ -219,7 +219,7 @@ class Invoice(SqlTableBase, SqlTableMixin):
             self.SAVATInfo.save(session)
 
     @classmethod
-    def deserialize(cls, record: dict | list):
+    def deserialize(cls, record: Union[dict, list]):
         # record is of type list
         if type(record) == list:
             return [cls.deserialize(item) for item in record]

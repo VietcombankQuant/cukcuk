@@ -36,7 +36,7 @@ class LoginSession:
     def api_client(self) -> requests.Session:
         if "__api_client" not in self.__dict__:
             self.__api_client = requests.Session()
-            self.__api_client.headers.update(self.__auth_headers)
+            self.__api_client.headers.update(self._auth_headers)
         return self.__api_client
 
     def get_all_branches(self, details=True) -> list[Branch]:
@@ -53,7 +53,7 @@ class LoginSession:
 
         return branches
 
-    def get_invoice_list(self, branch: Branch, page: int, limit: int = 100, last_sync_date: datetime = None) -> list[Branch]:
+    def get_invoice_paging(self, branch: Branch, page: int, limit: int = 100, last_sync_date: datetime = None) -> list[Branch]:
         url = f"{BASE_URL}/api/v1/sainvoices/paging"
         if last_sync_date == None:
             last_sync_date = datetime.today()
@@ -116,7 +116,7 @@ class LoginSession:
         }
 
     @property
-    def __auth_headers(self):
+    def _auth_headers(self):
         return {
             "CompanyCode": self.domain,
             "Authorization": f"Bearer {self.access_token}"

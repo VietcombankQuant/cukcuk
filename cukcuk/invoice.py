@@ -11,8 +11,8 @@ class VATInfo(SqlTableBase, SqlTableMixin):
 
     __tablename__ = "vat_info"
 
-    VATID = mapped_column(SqlString, primary_key=True)
-    RefID = mapped_column(SqlString, ForeignKey("invoices.RefId"))
+    VATID = mapped_column(SqlString(100), primary_key=True)
+    RefID = mapped_column(SqlString(100), ForeignKey("invoices.RefId"))
     ReceiverEIvoiceName = mapped_column(SqlString)
     Tel = mapped_column(SqlString)
     CompanyName = mapped_column(SqlString)
@@ -38,8 +38,8 @@ class InvoiceDetail(SqlTableBase, SqlTableMixin):
 
     __tablename__ = "invoice_details"
 
-    RefDetailId = mapped_column(SqlString, primary_key=True)
-    RefID = mapped_column(SqlString, ForeignKey("invoices.RefId"))
+    RefDetailId = mapped_column(SqlString(100), primary_key=True)
+    RefID = mapped_column(SqlString(100), ForeignKey("invoices.RefId"))
     RefDetailType = mapped_column(SqlInt)
     ItemID = mapped_column(SqlString)
     ItemName = mapped_column(SqlString)
@@ -78,8 +78,8 @@ class InvoicePayment(SqlTableBase, SqlTableMixin):
 
     __tablename__ = "invoice_payments"
 
-    SAInvoicePaymentID = mapped_column(SqlString, primary_key=True)
-    RefID = mapped_column(SqlString, ForeignKey("invoices.RefId"))
+    SAInvoicePaymentID = mapped_column(SqlString(100), primary_key=True)
+    RefID = mapped_column(SqlString(100), ForeignKey("invoices.RefId"))
     RefNo = mapped_column(SqlString)
     PaymentType = mapped_column(SqlInt)
     Amount = mapped_column(SqlFloat)
@@ -115,8 +115,8 @@ class InvoiceCoupon(SqlTableBase, SqlTableMixin):
 
     __tablename__ = "invoice_coupons"
 
-    SAInvoiceCouponID = mapped_column(SqlString, primary_key=True)
-    RefID = mapped_column(SqlString, ForeignKey("invoices.RefId"))
+    SAInvoiceCouponID = mapped_column(SqlString(100), primary_key=True)
+    RefID = mapped_column(SqlString(100), ForeignKey("invoices.RefId"))
     CouponID = mapped_column(SqlString)
     CouponCode = mapped_column(SqlString)
     DiscountType = mapped_column(SqlInt)
@@ -137,7 +137,7 @@ class Invoice(SqlTableBase, SqlTableMixin):
 
     __tablename__ = "invoices"
 
-    RefId = mapped_column(SqlString, primary_key=True)
+    RefId = mapped_column(SqlString(100), primary_key=True)
     RefType = mapped_column(SqlInt)
     RefNo = mapped_column(SqlString)
     RefDate = mapped_column(SqlString)

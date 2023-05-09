@@ -10,7 +10,7 @@ class Branch(SqlTableBase, SqlTableMixin):
 
     __tablename__ = "branches"
 
-    Id = mapped_column(SqlString, primary_key=True)
+    Id = mapped_column(SqlString(100), primary_key=True)
     Code = mapped_column(SqlString)
     Name = mapped_column(SqlString)
     IsBaseDepot = mapped_column(SqlBool)

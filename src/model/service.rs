@@ -1,0 +1,32 @@
+use std::fmt::Debug;
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, Debug, Default)]
+#[serde(default)]
+#[serde(rename_all = "PascalCase")]
+#[serde(bound(serialize = "T: Serialize", deserialize = "T: Deserialize<'de>"))]
+pub struct ServiceResult<T>
+where
+    T: Debug + Default,
+{
+    coode: u32,
+    error_type: Option<u32>,
+    error_message: Option<String>,
+    success: bool,
+    environment: Option<String>,
+    data: Option<T>,
+    total: Option<u32>,
+}
+
+impl<T> ServiceResult<T>
+where
+    T: Debug + Default,
+{
+    pub fn data(&self) -> Option<&T> {
+        match &self.data {
+            None => None,
+            Some(data) => Some(&data),
+        }
+    }
+}

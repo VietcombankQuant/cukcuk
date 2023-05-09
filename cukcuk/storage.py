@@ -4,8 +4,8 @@ from .common import SqlTableBase
 
 
 class Storage:
-    def __init__(self, db_url: str):
-        engine = sqlalchemy.create_engine(url=db_url)
+    def __init__(self, db_url: str, **kwargs):
+        engine = sqlalchemy.create_engine(url=db_url, **kwargs)
         SqlTableBase.metadata.create_all(engine)
         self.__session = SqlSession(engine)
 

@@ -26,11 +26,12 @@ async fn main() -> anyhow::Result<()> {
     };
 
     for branch in branches {
-        let invoices = session
+        let summaries = session
             .get_invoice_paging(&branch, 1, 1, active_date)
             .await?;
 
-        for invoice in invoices {
+        for summary in summaries {
+            let invoice = session.get_invoice(&summary.ref_id).await?;
             println!("{:#?}", invoice);
         }
     }

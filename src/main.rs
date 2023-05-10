@@ -1,10 +1,7 @@
 mod model;
 mod session;
 
-use crate::{
-    model::{Branch, LoginParam, ServiceResult},
-    session::LoginSession,
-};
+use crate::{model::LoginParam, session::LoginSession};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

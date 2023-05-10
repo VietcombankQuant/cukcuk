@@ -1,9 +1,38 @@
+use futures::{StreamExt, TryStreamExt};
+
 use crate::{
     model::{Branch, Invoice, InvoicePagingParam, InvoiceSummary, ServiceResult},
     session::{LoginSession, API_DOMAIN},
 };
 
 impl LoginSession {
+    pub async fn get_invoices(
+        &self,
+        branch: &Branch,
+        last_sync_date: chrono::DateTime<chrono::Utc>,
+    ) -> anyhow::Result<Vec<Invoice>> {
+        let mut all_invoices = Vec::new();
+        let mut page: u32 = 0;
+        loop {
+            page += 1;
+            let summaries = self
+                .get_invoice_paging(branch, page, 100, last_sync_date)
+                .await?;
+
+            if summaries.is_empty() {
+                return Ok(all_invoices);
+            }
+
+            let invoices = futures::stream::iter(&summaries)
+                .map(|summary| self.get_invoice(&summary.ref_id))
+                .buffer_unordered(256)
+                .try_collect::<Vec<Invoice>>()
+                .await?;
+
+            all_invoices.extend(invoices);
+        }
+    }
+
     pub async fn get_invoice_paging(
         &self,
         branch: &Branch,
@@ -40,7 +69,6 @@ impl LoginSession {
         let url = format!("https://{}/api/v1/sainvoices/{}", API_DOMAIN, invoice_ref);
         let resp = self.api_client.get(url).send().await?;
         let message = resp.text().await?;
-        println!("message:\n{}", message);
         let results: ServiceResult<Invoice> = serde_json::from_str(&message)?;
         if !results.success {
             return Err(anyhow::anyhow!(

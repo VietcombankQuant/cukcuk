@@ -123,59 +123,59 @@ pub struct InvoiceDetail {
 #[serde(rename_all = "PascalCase")]
 struct InvoicePayment {
     #[serde(rename = "SAInvoicePaymentID")]
-    pub SAInvoicePaymentID: String,
+    pub sainvoice_payment_id: String,
     #[serde(rename = "RefID")]
-    pub RefID: String,
+    pub ref_id: String,
     #[serde(rename = "RefNo")]
-    pub RefNo: String,
+    pub ref_no: String,
     #[serde(rename = "PaymentType")]
-    pub PaymentType: i32,
+    pub payment_type: i32,
     #[serde(rename = "Amount")]
-    pub Amount: f64,
+    pub amount: f64,
     #[serde(rename = "CustomerID")]
-    pub CustomerID: String,
+    pub customer_id: String,
     #[serde(rename = "CustomerName")]
-    pub CustomerName: String,
+    pub customer_name: String,
     #[serde(rename = "PaymentName")]
-    pub PaymentName: String,
+    pub payment_name: String,
     #[serde(rename = "VoucherID")]
-    pub VoucherID: String,
+    pub voucher_id: String,
     #[serde(rename = "VoucherQuantity")]
-    pub VoucherQuantity: i32,
+    pub voucher_quantity: i32,
     #[serde(rename = "VoucherAmount")]
-    pub VoucherAmount: f64,
+    pub voucher_amount: f64,
     #[serde(rename = "VoucherCode")]
-    pub VoucherCode: String,
+    pub voucher_code: String,
     #[serde(rename = "VoucherName")]
-    pub VoucherName: String,
+    pub voucher_name: String,
     #[serde(rename = "CardID")]
-    pub CardID: String,
+    pub card_id: String,
     #[serde(rename = "CardName")]
-    pub CardName: String,
+    pub card_name: String,
     #[serde(rename = "ApplyVoucherType")]
-    pub ApplyVoucherType: i32,
+    pub apply_voucher_type: i32,
     #[serde(rename = "VoucherAllAmount")]
-    pub VoucherAllAmount: f64,
+    pub voucher_all_amount: f64,
     #[serde(rename = "VoucherFoodAmount")]
-    pub VoucherFoodAmount: f64,
+    pub voucher_food_amount: f64,
     #[serde(rename = "VoucherDrinkAmount")]
-    pub VoucherDrinkAmount: f64,
+    pub voucher_drink_amount: f64,
     #[serde(rename = "CardNo")]
-    pub CardNo: String,
+    pub card_no: String,
     #[serde(rename = "ApprovalCode")]
-    pub ApprovalCode: String,
+    pub approval_code: String,
     #[serde(rename = "CustomerAddress")]
-    pub CustomerAddress: String,
+    pub customer_address: String,
     #[serde(rename = "BankName")]
-    pub BankName: String,
+    pub bank_name: String,
     #[serde(rename = "BankAccountNumber")]
-    pub BankAccountNumber: String,
+    pub bank_account_number: String,
     #[serde(rename = "CurrencyID")]
-    pub CurrencyID: String,
+    pub currency_id: String,
     #[serde(rename = "MainCurrency")]
-    pub MainCurrency: String,
+    pub main_currency: String,
     #[serde(rename = "ExchangeRate")]
-    pub ExchangeRate: f64,
+    pub exchange_rate: f64,
     #[serde(rename = "ExchangeAmount")]
-    pub ExchangeAmount: f64,
+    pub exchange_amount: f64,
 }

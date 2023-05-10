@@ -72,3 +72,40 @@ pub struct Invoice {
     used_point: i32,
     add_point: i32,
 }
+
+#[derive(Serialize, Deserialize, Debug, Default)]
+#[serde(default)]
+#[serde(rename_all = "PascalCase")]
+pub struct InvoiceDetail {
+    RefDetailId: String,
+    RefID: String,
+    RefDetailType: i32,
+    ItemID: String,
+    ItemName: String,
+    Quantity: f64,
+    UnitPrice: f64,
+    UnitID: String,
+    UnitName: String,
+    Amount: f64,
+    DiscountRate: f64,
+    Description: String,
+    SortOrder: i32,
+    ParentID: String,
+    InventoryItemAdditionID: String,
+    InventoryItemType: i32,
+    IsSeftPrice: bool,
+    PromotionRate: f64,
+    PromotionType: i32,
+    PromotionName: String,
+    OrderDetailID: String,
+    SAInvoicePromotionAmount: f64,
+    RefDate: String,
+    ItemCode: String,
+    PromotionAmount: f64,
+    InventoryItemCategoryID: String,
+    AllocationAmount: f64,
+    PreTaxAmount: f64,
+    TaxRate: f64,
+    TaxAmount: f64,
+    AllocationDeliveryPromotionAmount: f64,
+}

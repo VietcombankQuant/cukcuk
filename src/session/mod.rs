@@ -1,7 +1,6 @@
-use futures::{StreamExt, TryStreamExt};
 use reqwest::header::{HeaderMap, AUTHORIZATION};
 
-use crate::model::{Branch, BranchSummary, LoginParam, LoginResponse, ServiceResult};
+use crate::model::{LoginParam, LoginResponse, ServiceResult};
 
 mod branch;
 
@@ -45,4 +44,3 @@ impl LoginSession {
         Ok(client)
     }
 }
-

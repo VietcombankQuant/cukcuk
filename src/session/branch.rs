@@ -1,7 +1,7 @@
 use futures::{StreamExt, TryStreamExt};
 
 use crate::{
-    model::{Branch, BranchSummary, LoginParam, LoginResponse, ServiceResult},
+    model::{Branch, BranchSummary, ServiceResult},
     session::{LoginSession, API_DOMAIN},
 };
 

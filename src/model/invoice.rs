@@ -209,3 +209,50 @@ struct InvoiceCoupon {
     #[serde(rename = "InvoiceDiscountAmount")]
     invoice_discount_amount: f64,
 }
+
+#[derive(Serialize, Deserialize, Debug, Default)]
+#[serde(default)]
+struct VatInfo {
+    #[serde(rename = "VATID")]
+    vatid: String,
+    #[serde(rename = "RefID")]
+    ref_id: String,
+    #[serde(rename = "ReceiverEIvoiceName")]
+    receiver_eivoice_name: String,
+    #[serde(rename = "Tel")]
+    tel: String,
+    #[serde(rename = "CompanyName")]
+    company_name: String,
+    #[serde(rename = "CompanyAddress")]
+    company_address: String,
+    #[serde(rename = "TaxCode")]
+    tax_code: String,
+    #[serde(rename = "Email")]
+    email: String,
+    #[serde(rename = "Status")]
+    status: bool,
+    #[serde(rename = "StatusReleaseEInvoice")]
+    status_release_einvoice: i32,
+    #[serde(rename = "EInvoiceNumber")]
+    einvoice_number: String,
+    #[serde(rename = "StatusSendEmail")]
+    status_send_email: i32,
+    #[serde(rename = "TransactionID")]
+    transaction_id: String,
+    #[serde(rename = "SellerTaxCode")]
+    seller_tax_code: String,
+    #[serde(rename = "TemplateCode")]
+    template_code: String,
+    #[serde(rename = "InvoiceSeries")]
+    invoice_series: String,
+    #[serde(rename = "RefDateReleaseEInvoice")]
+    ref_date_release_einvoice: String,
+    #[serde(rename = "StatusSendToTax")]
+    status_send_to_tax: Option<i32>,
+    #[serde(rename = "AccountObjectIdentificationNumber")]
+    account_object_identification_number: String,
+    #[serde(rename = "IsCalculatingMachinePublishing")]
+    is_calculating_machine_publishing: Option<bool>,
+    #[serde(rename = "ErrorNoteEinvoice")]
+    error_note_einvoice: String,
+}

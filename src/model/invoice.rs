@@ -139,46 +139,68 @@ pub struct Invoice {
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 #[serde(default)]
-#[serde(rename_all = "PascalCase")]
 pub struct InvoiceDetail {
+    #[serde(rename = "RefDetailId")]
     pub ref_detail_id: String,
     #[serde(rename = "RefID")]
     pub ref_id: String,
+    #[serde(rename = "RefDetailType")]
     pub ref_detail_type: i32,
     #[serde(rename = "ItemID")]
     pub item_id: String,
+    #[serde(rename = "ItemName")]
     pub item_name: String,
+    #[serde(rename = "Quantity")]
     pub quantity: f64,
+    #[serde(rename = "UnitPrice")]
     pub unit_price: f64,
     #[serde(rename = "UnitID")]
     pub unit_id: String,
+    #[serde(rename = "UnitName")]
     pub unit_name: String,
+    #[serde(rename = "Amount")]
     pub amount: f64,
+    #[serde(rename = "DiscountRate")]
     pub discount_rate: f64,
+    #[serde(rename = "Description")]
     pub description: String,
+    #[serde(rename = "SortOrder")]
     pub sort_order: i32,
     #[serde(rename = "ParentID")]
     pub parent_id: String,
     #[serde(rename = "InventoryItemAdditionID")]
     pub inventory_item_addition_id: String,
+    #[serde(rename = "InventoryItemType")]
     pub inventory_item_type: i32,
+    #[serde(rename = "IsSeftPrice")]
     pub is_seft_price: bool,
+    #[serde(rename = "PromotionRate")]
     pub promotion_rate: f64,
+    #[serde(rename = "PromotionType")]
     pub promotion_type: i32,
+    #[serde(rename = "PromotionName")]
     pub promotion_name: String,
     #[serde(rename = "OrderDetailID")]
     pub order_detail_id: String,
     #[serde(rename = "SAInvoicePromotionAmount")]
-    pub sa_invoice_promotion_amount: f64,
+    pub sainvoice_promotion_amount: f64,
+    #[serde(rename = "RefDate")]
     pub ref_date: String,
+    #[serde(rename = "ItemCode")]
     pub item_code: String,
+    #[serde(rename = "PromotionAmount")]
     pub promotion_amount: f64,
     #[serde(rename = "InventoryItemCategoryID")]
     pub inventory_item_category_id: String,
+    #[serde(rename = "AllocationAmount")]
     pub allocation_amount: f64,
+    #[serde(rename = "PreTaxAmount")]
     pub pre_tax_amount: f64,
+    #[serde(rename = "TaxRate")]
     pub tax_rate: f64,
+    #[serde(rename = "TaxAmount")]
     pub tax_amount: f64,
+    #[serde(rename = "AllocationDeliveryPromotionAmount")]
     pub allocation_delivery_promotion_amount: f64,
 }
 

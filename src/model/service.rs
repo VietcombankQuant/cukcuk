@@ -18,19 +18,3 @@ where
     pub data: Option<T>,
     pub total: Option<u32>,
 }
-
-impl<T> ServiceResult<T>
-where
-    T: Debug + Default,
-{
-    pub fn data(&self) -> Option<&T> {
-        match &self.data {
-            None => None,
-            Some(data) => Some(&data),
-        }
-    }
-
-    pub fn take_data(self) -> Option<T> {
-        self.data
-    }
-}

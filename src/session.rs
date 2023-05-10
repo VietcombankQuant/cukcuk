@@ -26,7 +26,7 @@ impl LoginSession {
             ));
         }
 
-        let access_token = result.take_data().unwrap_or_default().access_token;
+        let access_token = result.data.unwrap_or_default().access_token;
         let api_client = LoginSession::api_client(&login_param.domain, &access_token)?;
 
         Ok(Self { api_client })
@@ -51,7 +51,7 @@ impl LoginSession {
         let message = resp.text().await?;
         println!("message: {}", message);
         let result: ServiceResult<Vec<BranchSummary>> = serde_json::from_str(&message)?;
-        let branches = result.take_data().unwrap_or_default();
+        let branches = result.data.unwrap_or_default();
         Ok(branches)
     }
 
@@ -75,7 +75,7 @@ impl LoginSession {
         let resp = self.api_client.get(&branch_detail_url).send().await?;
         let message = resp.text().await?;
         let result: ServiceResult<Branch> = serde_json::from_str(&message)?;
-        let branch = result.take_data().unwrap_or(Default::default());
+        let branch = result.data.unwrap_or(Default::default());
         Ok(branch)
     }
 }

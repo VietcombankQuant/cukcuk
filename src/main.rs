@@ -1,7 +1,4 @@
-mod model;
-mod session;
-
-use crate::{model::LoginParam, session::LoginSession};
+use ::cukcuk::{model::LoginParam, session::LoginSession};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

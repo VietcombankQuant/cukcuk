@@ -120,7 +120,6 @@ pub struct InvoiceDetail {
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 #[serde(default)]
-#[serde(rename_all = "PascalCase")]
 struct InvoicePayment {
     #[serde(rename = "SAInvoicePaymentID")]
     pub sainvoice_payment_id: String,
@@ -178,4 +177,35 @@ struct InvoicePayment {
     pub exchange_rate: f64,
     #[serde(rename = "ExchangeAmount")]
     pub exchange_amount: f64,
+}
+
+#[derive(Serialize, Deserialize, Debug, Default)]
+#[serde(default)]
+struct InvoiceCoupon {
+    #[serde(rename = "SAInvoiceCouponID")]
+    SAInvoiceCouponID: string,
+    #[serde(rename = "RefID")]
+    RefID: string,
+    #[serde(rename = "CouponID")]
+    CouponID: string,
+    #[serde(rename = "CouponCode")]
+    CouponCode: string,
+    #[serde(rename = "DiscountType")]
+    DiscountType: int,
+    #[serde(rename = "DiscountPercent")]
+    DiscountPercent: decimal,
+    #[serde(rename = "DiscountAmount")]
+    DiscountAmount: decimal,
+    #[serde(rename = "ApplyFromDate")]
+    ApplyFromDate: datetime,
+    #[serde(rename = "ApplyToDate")]
+    ApplyToDate: datetime,
+    #[serde(rename = "ApplyCondition")]
+    ApplyCondition: string,
+    #[serde(rename = "IsUnlimitedApply")]
+    IsUnlimitedApply: bool,
+    #[serde(rename = "ApplyFor")]
+    ApplyFor: string,
+    #[serde(rename = "InvoiceDiscountAmount")]
+    InvoiceDiscountAmount: decimal,
 }

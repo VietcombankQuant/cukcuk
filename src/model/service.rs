@@ -10,13 +10,13 @@ pub struct ServiceResult<T>
 where
     T: Debug + Default,
 {
-    coode: u32,
-    error_type: Option<u32>,
-    error_message: Option<String>,
-    success: bool,
-    environment: Option<String>,
-    data: Option<T>,
-    total: Option<u32>,
+    pub code: u32,
+    pub error_type: Option<u32>,
+    pub error_message: Option<String>,
+    pub success: bool,
+    pub environment: Option<String>,
+    pub data: Option<T>,
+    pub total: Option<u32>,
 }
 
 impl<T> ServiceResult<T>

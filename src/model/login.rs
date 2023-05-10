@@ -4,9 +4,9 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all = "PascalCase")]
 struct LoginData {
     #[serde(rename = "AppID")]
-    app_id: String,
-    domain: String,
-    login_time: String,
+    pub app_id: String,
+    pub domain: String,
+    pub login_time: String,
 }
 
 impl LoginData {
@@ -41,10 +41,10 @@ impl LoginData {
 #[serde(rename_all = "PascalCase")]
 pub struct LoginParam {
     #[serde(rename = "AppID")]
-    app_id: String,
-    domain: String,
-    login_time: String,
-    signature_info: String,
+    pub app_id: String,
+    pub domain: String,
+    pub login_time: String,
+    pub signature_info: String,
 }
 
 impl LoginParam {
@@ -66,15 +66,9 @@ impl LoginParam {
 #[serde(default)]
 pub struct LoginResponse {
     #[serde(rename = "AppID")]
-    app_id: String,
-    domain: String,
-    access_token: String,
-    company_code: String,
-    environment: Option<String>,
-}
-
-impl LoginResponse {
-    pub fn token(&self) -> &str {
-        &self.access_token
-    }
+    pub app_id: String,
+    pub domain: String,
+    pub(crate) access_token: String,
+    pub company_code: String,
+    pub environment: Option<String>,
 }

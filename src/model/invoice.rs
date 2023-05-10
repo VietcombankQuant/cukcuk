@@ -2,125 +2,189 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 #[serde(default)]
-#[serde(rename_all = "PascalCase")]
 pub struct InvoicePagingParam {
+    #[serde(rename = "Page")]
     pub page: u32,
+    #[serde(rename = "Limit")]
     pub limit: u32,
-
     #[serde(rename = "BranchID")]
     pub branch_id: String,
-
+    #[serde(rename = "HaveCustomer")]
     pub have_customer: bool,
+    #[serde(rename = "LastSyncDate")]
     pub last_sync_date: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 #[serde(default)]
-#[serde(rename_all = "PascalCase")]
+pub struct InvoiceSummary {
+    #[serde(rename = "RefId")]
+    pub ref_id: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Default)]
+#[serde(default)]
 pub struct Invoice {
-    ref_id: String,
-    ref_type: i32,
-    ref_no: String,
-    ref_date: String,
-    branch_id: String,
-    order_id: String,
-    order_type: i32,
-    shipping_date: String,
-    shipping_due_date: String,
-    customer_id: String,
-    customer_name: String,
-    customer_tel: String,
-    membership_card_id: String,
-    employee_id: String,
-    employee_name: String,
-    delivery_employee_id: String,
-    delivery_employee_name: String,
-    waiter_employee_id: String,
-    waiter_employee_name: String,
-    shipping_address: String,
-    promotion_id: String,
-    promotion_name: String,
-    table_name: String,
-    description: String,
-    deposit_amount: f64,
-    amount: f64,
-    delivery_amount: f64,
-    service_rate: f64,
-    service_amount: f64,
+    #[serde(rename = "RefId")]
+    pub ref_id: String,
+    #[serde(rename = "RefType")]
+    pub ref_type: i32,
+    #[serde(rename = "RefNo")]
+    pub ref_no: String,
+    #[serde(rename = "RefDate")]
+    pub ref_date: String,
+    #[serde(rename = "BranchId")]
+    pub branch_id: String,
+    #[serde(rename = "OrderId")]
+    pub order_id: String,
+    #[serde(rename = "OrderType")]
+    pub order_type: i32,
+    #[serde(rename = "ShippingDate")]
+    pub shipping_date: String,
+    #[serde(rename = "ShippingDueDate")]
+    pub shipping_due_date: String,
+    #[serde(rename = "CustomerId")]
+    pub customer_id: String,
+    #[serde(rename = "CustomerName")]
+    pub customer_name: String,
+    #[serde(rename = "CustomerTel")]
+    pub customer_tel: String,
+    #[serde(rename = "MembershipCardId")]
+    pub membership_card_id: String,
+    #[serde(rename = "EmployeeId")]
+    pub employee_id: String,
+    #[serde(rename = "EmployeeName")]
+    pub employee_name: String,
+    #[serde(rename = "DeliveryEmployeeId")]
+    pub delivery_employee_id: String,
+    #[serde(rename = "DeliveryEmployeeName")]
+    pub delivery_employee_name: String,
+    #[serde(rename = "WaiterEmployeeId")]
+    pub waiter_employee_id: String,
+    #[serde(rename = "WaiterEmployeeName")]
+    pub waiter_employee_name: String,
+    #[serde(rename = "ShippingAddress")]
+    pub shipping_address: String,
+    #[serde(rename = "PromotionId")]
+    pub promotion_id: String,
+    #[serde(rename = "PromotionName")]
+    pub promotion_name: String,
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+    #[serde(rename = "Description")]
+    pub description: String,
+    #[serde(rename = "DepositAmount")]
+    pub deposit_amount: f64,
+    #[serde(rename = "Amount")]
+    pub amount: f64,
+    #[serde(rename = "DeliveryAmount")]
+    pub delivery_amount: f64,
+    #[serde(rename = "ServiceRate")]
+    pub service_rate: f64,
+    #[serde(rename = "ServiceAmount")]
+    pub service_amount: f64,
     #[serde(rename = "VATRate")]
-    vat_rate: f64,
+    pub vatrate: f64,
     #[serde(rename = "VATAmount")]
-    vat_amount: f64,
-    discount_amount: f64,
-    promotion_rate: f64,
-    promotion_amount: f64,
-    promotion_items_amount: f64,
-    receive_amount: f64,
-    return_amount: f64,
-    total_amount: f64,
-    sale_amount: f64,
-    total_item_amount: f64,
-    total_item_amount_after_tax: f64,
-    tip_amount: f64,
-    service_tax_rate: f64,
-    delivery_tax_rate: f64,
-    cancel_date: String,
-    cancel_by: String,
-    cancel_reason: String,
-    payment_status: i32,
-    available_point: i32,
-    used_point: i32,
-    add_point: i32,
+    pub vatamount: f64,
+    #[serde(rename = "DiscountAmount")]
+    pub discount_amount: f64,
+    #[serde(rename = "PromotionRate")]
+    pub promotion_rate: f64,
+    #[serde(rename = "PromotionAmount")]
+    pub promotion_amount: f64,
+    #[serde(rename = "PromotionItemsAmount")]
+    pub promotion_items_amount: f64,
+    #[serde(rename = "ReceiveAmount")]
+    pub receive_amount: f64,
+    #[serde(rename = "ReturnAmount")]
+    pub return_amount: f64,
+    #[serde(rename = "TotalAmount")]
+    pub total_amount: f64,
+    #[serde(rename = "SaleAmount")]
+    pub sale_amount: f64,
+    #[serde(rename = "TotalItemAmount")]
+    pub total_item_amount: f64,
+    #[serde(rename = "TotalItemAmountAfterTax")]
+    pub total_item_amount_after_tax: f64,
+    #[serde(rename = "TipAmount")]
+    pub tip_amount: f64,
+    #[serde(rename = "ServiceTaxRate")]
+    pub service_tax_rate: f64,
+    #[serde(rename = "DeliveryTaxRate")]
+    pub delivery_tax_rate: f64,
+    #[serde(rename = "CancelDate")]
+    pub cancel_date: String,
+    #[serde(rename = "CancelBy")]
+    pub cancel_by: String,
+    #[serde(rename = "CancelReason")]
+    pub cancel_reason: String,
+    #[serde(rename = "PaymentStatus")]
+    pub payment_status: i32,
+    #[serde(rename = "AvailablePoint")]
+    pub available_point: i32,
+    #[serde(rename = "UsedPoint")]
+    pub used_point: i32,
+    #[serde(rename = "AddPoint")]
+    pub add_point: i32,
+    #[serde(rename = "SAInvoiceDetails")]
+    pub details: Vec<InvoiceDetail>,
+    #[serde(rename = "SAInvoicePayments")]
+    pub payments: Vec<InvoicePayment>,
+    #[serde(rename = "SAInvoiceCoupons")]
+    pub coupons: Vec<InvoiceCoupon>,
+    #[serde(rename = "SAVATInfo")]
+    pub vat_info: VatInfo,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 #[serde(default)]
 #[serde(rename_all = "PascalCase")]
 pub struct InvoiceDetail {
-    ref_detail_id: String,
+    pub ref_detail_id: String,
     #[serde(rename = "RefID")]
-    ref_id: String,
-    ref_detail_type: i32,
+    pub ref_id: String,
+    pub ref_detail_type: i32,
     #[serde(rename = "ItemID")]
-    item_id: String,
-    item_name: String,
-    quantity: f64,
-    unit_price: f64,
+    pub item_id: String,
+    pub item_name: String,
+    pub quantity: f64,
+    pub unit_price: f64,
     #[serde(rename = "UnitID")]
-    unit_id: String,
-    unit_name: String,
-    amount: f64,
-    discount_rate: f64,
-    description: String,
-    sort_order: i32,
+    pub unit_id: String,
+    pub unit_name: String,
+    pub amount: f64,
+    pub discount_rate: f64,
+    pub description: String,
+    pub sort_order: i32,
     #[serde(rename = "ParentID")]
-    parent_id: String,
+    pub parent_id: String,
     #[serde(rename = "InventoryItemAdditionID")]
-    inventory_item_addition_id: String,
-    inventory_item_type: i32,
-    is_seft_price: bool,
-    promotion_rate: f64,
-    promotion_type: i32,
-    promotion_name: String,
+    pub inventory_item_addition_id: String,
+    pub inventory_item_type: i32,
+    pub is_seft_price: bool,
+    pub promotion_rate: f64,
+    pub promotion_type: i32,
+    pub promotion_name: String,
     #[serde(rename = "OrderDetailID")]
-    order_detail_id: String,
+    pub order_detail_id: String,
     #[serde(rename = "SAInvoicePromotionAmount")]
-    sa_invoice_promotion_amount: f64,
-    ref_date: String,
-    item_code: String,
-    promotion_amount: f64,
+    pub sa_invoice_promotion_amount: f64,
+    pub ref_date: String,
+    pub item_code: String,
+    pub promotion_amount: f64,
     #[serde(rename = "InventoryItemCategoryID")]
-    inventory_item_category_id: String,
-    allocation_amount: f64,
-    pre_tax_amount: f64,
-    tax_rate: f64,
-    tax_amount: f64,
-    allocation_delivery_promotion_amount: f64,
+    pub inventory_item_category_id: String,
+    pub allocation_amount: f64,
+    pub pre_tax_amount: f64,
+    pub tax_rate: f64,
+    pub tax_amount: f64,
+    pub allocation_delivery_promotion_amount: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 #[serde(default)]
-struct InvoicePayment {
+pub struct InvoicePayment {
     #[serde(rename = "SAInvoicePaymentID")]
     pub sainvoice_payment_id: String,
     #[serde(rename = "RefID")]
@@ -181,78 +245,78 @@ struct InvoicePayment {
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 #[serde(default)]
-struct InvoiceCoupon {
+pub struct InvoiceCoupon {
     #[serde(rename = "SAInvoiceCouponID")]
-    sainvoice_coupon_id: String,
+    pub sainvoice_coupon_id: String,
     #[serde(rename = "RefID")]
-    ref_id: String,
+    pub ref_id: String,
     #[serde(rename = "CouponID")]
-    coupon_id: String,
+    pub coupon_id: String,
     #[serde(rename = "CouponCode")]
-    coupon_code: String,
+    pub coupon_code: String,
     #[serde(rename = "DiscountType")]
-    discount_type: i32,
+    pub discount_type: i32,
     #[serde(rename = "DiscountPercent")]
-    discount_percent: f64,
+    pub discount_percent: f64,
     #[serde(rename = "DiscountAmount")]
-    discount_amount: f64,
+    pub discount_amount: f64,
     #[serde(rename = "ApplyFromDate")]
-    apply_from_date: String,
+    pub apply_from_date: String,
     #[serde(rename = "ApplyToDate")]
-    apply_to_date: String,
+    pub apply_to_date: String,
     #[serde(rename = "ApplyCondition")]
-    apply_condition: String,
+    pub apply_condition: String,
     #[serde(rename = "IsUnlimitedApply")]
-    is_unlimited_apply: bool,
+    pub is_unlimited_apply: bool,
     #[serde(rename = "ApplyFor")]
-    apply_for: String,
+    pub apply_for: String,
     #[serde(rename = "InvoiceDiscountAmount")]
-    invoice_discount_amount: f64,
+    pub invoice_discount_amount: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 #[serde(default)]
-struct VatInfo {
+pub struct VatInfo {
     #[serde(rename = "VATID")]
-    vatid: String,
+    pub vatid: String,
     #[serde(rename = "RefID")]
-    ref_id: String,
+    pub ref_id: String,
     #[serde(rename = "ReceiverEIvoiceName")]
-    receiver_eivoice_name: String,
+    pub receiver_eivoice_name: String,
     #[serde(rename = "Tel")]
-    tel: String,
+    pub tel: String,
     #[serde(rename = "CompanyName")]
-    company_name: String,
+    pub company_name: String,
     #[serde(rename = "CompanyAddress")]
-    company_address: String,
+    pub company_address: String,
     #[serde(rename = "TaxCode")]
-    tax_code: String,
+    pub tax_code: String,
     #[serde(rename = "Email")]
-    email: String,
+    pub email: String,
     #[serde(rename = "Status")]
-    status: bool,
+    pub status: bool,
     #[serde(rename = "StatusReleaseEInvoice")]
-    status_release_einvoice: i32,
+    pub status_release_einvoice: i32,
     #[serde(rename = "EInvoiceNumber")]
-    einvoice_number: String,
+    pub einvoice_number: String,
     #[serde(rename = "StatusSendEmail")]
-    status_send_email: i32,
+    pub status_send_email: i32,
     #[serde(rename = "TransactionID")]
-    transaction_id: String,
+    pub transaction_id: String,
     #[serde(rename = "SellerTaxCode")]
-    seller_tax_code: String,
+    pub seller_tax_code: String,
     #[serde(rename = "TemplateCode")]
-    template_code: String,
+    pub template_code: String,
     #[serde(rename = "InvoiceSeries")]
-    invoice_series: String,
+    pub invoice_series: String,
     #[serde(rename = "RefDateReleaseEInvoice")]
-    ref_date_release_einvoice: String,
+    pub ref_date_release_einvoice: String,
     #[serde(rename = "StatusSendToTax")]
-    status_send_to_tax: Option<i32>,
+    pub status_send_to_tax: Option<i32>,
     #[serde(rename = "AccountObjectIdentificationNumber")]
-    account_object_identification_number: String,
+    pub account_object_identification_number: String,
     #[serde(rename = "IsCalculatingMachinePublishing")]
-    is_calculating_machine_publishing: Option<bool>,
+    pub is_calculating_machine_publishing: Option<bool>,
     #[serde(rename = "ErrorNoteEinvoice")]
-    error_note_einvoice: String,
+    pub error_note_einvoice: String,
 }

@@ -45,15 +45,6 @@ impl LoginSession {
 }
 
 impl LoginSession {
-    pub async fn get_branch_summaries(&self) -> anyhow::Result<Vec<BranchSummary>> {
-        let branch_url = format!("https://{}/api/v1/branchs/all", API_DOMAIN);
-        let resp = self.api_client.get(branch_url).send().await?;
-        let message = resp.text().await?;
-        let result: ServiceResult<Vec<BranchSummary>> = serde_json::from_str(&message)?;
-        let branches = result.data.unwrap_or_default();
-        Ok(branches)
-    }
-
     pub async fn get_branches(&self) -> anyhow::Result<Vec<Branch>> {
         let summaries = self.get_branch_summaries().await?;
         let branches = futures::stream::iter(&summaries)
@@ -61,6 +52,15 @@ impl LoginSession {
             .buffer_unordered(8)
             .try_collect::<Vec<Branch>>()
             .await?;
+        Ok(branches)
+    }
+
+    async fn get_branch_summaries(&self) -> anyhow::Result<Vec<BranchSummary>> {
+        let branch_url = format!("https://{}/api/v1/branchs/all", API_DOMAIN);
+        let resp = self.api_client.get(branch_url).send().await?;
+        let message = resp.text().await?;
+        let result: ServiceResult<Vec<BranchSummary>> = serde_json::from_str(&message)?;
+        let branches = result.data.unwrap_or_default();
         Ok(branches)
     }
 

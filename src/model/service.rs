@@ -29,4 +29,8 @@ where
             Some(data) => Some(&data),
         }
     }
+
+    pub fn take_data(self) -> Option<T> {
+        self.data
+    }
 }

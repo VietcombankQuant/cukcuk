@@ -77,35 +77,105 @@ pub struct Invoice {
 #[serde(default)]
 #[serde(rename_all = "PascalCase")]
 pub struct InvoiceDetail {
-    RefDetailId: String,
-    RefID: String,
-    RefDetailType: i32,
-    ItemID: String,
-    ItemName: String,
-    Quantity: f64,
-    UnitPrice: f64,
-    UnitID: String,
-    UnitName: String,
-    Amount: f64,
-    DiscountRate: f64,
-    Description: String,
-    SortOrder: i32,
-    ParentID: String,
-    InventoryItemAdditionID: String,
-    InventoryItemType: i32,
-    IsSeftPrice: bool,
-    PromotionRate: f64,
-    PromotionType: i32,
-    PromotionName: String,
-    OrderDetailID: String,
-    SAInvoicePromotionAmount: f64,
-    RefDate: String,
-    ItemCode: String,
-    PromotionAmount: f64,
-    InventoryItemCategoryID: String,
-    AllocationAmount: f64,
-    PreTaxAmount: f64,
-    TaxRate: f64,
-    TaxAmount: f64,
-    AllocationDeliveryPromotionAmount: f64,
+    ref_detail_id: String,
+    #[serde(rename = "RefID")]
+    ref_id: String,
+    ref_detail_type: i32,
+    #[serde(rename = "ItemID")]
+    item_id: String,
+    item_name: String,
+    quantity: f64,
+    unit_price: f64,
+    #[serde(rename = "UnitID")]
+    unit_id: String,
+    unit_name: String,
+    amount: f64,
+    discount_rate: f64,
+    description: String,
+    sort_order: i32,
+    #[serde(rename = "ParentID")]
+    parent_id: String,
+    #[serde(rename = "InventoryItemAdditionID")]
+    inventory_item_addition_id: String,
+    inventory_item_type: i32,
+    is_seft_price: bool,
+    promotion_rate: f64,
+    promotion_type: i32,
+    promotion_name: String,
+    #[serde(rename = "OrderDetailID")]
+    order_detail_id: String,
+    #[serde(rename = "SAInvoicePromotionAmount")]
+    sa_invoice_promotion_amount: f64,
+    ref_date: String,
+    item_code: String,
+    promotion_amount: f64,
+    #[serde(rename = "InventoryItemCategoryID")]
+    inventory_item_category_id: String,
+    allocation_amount: f64,
+    pre_tax_amount: f64,
+    tax_rate: f64,
+    tax_amount: f64,
+    allocation_delivery_promotion_amount: f64,
+}
+
+#[derive(Serialize, Deserialize, Debug, Default)]
+#[serde(default)]
+#[serde(rename_all = "PascalCase")]
+struct InvoicePayment {
+    #[serde(rename = "SAInvoicePaymentID")]
+    pub SAInvoicePaymentID: String,
+    #[serde(rename = "RefID")]
+    pub RefID: String,
+    #[serde(rename = "RefNo")]
+    pub RefNo: String,
+    #[serde(rename = "PaymentType")]
+    pub PaymentType: i32,
+    #[serde(rename = "Amount")]
+    pub Amount: f64,
+    #[serde(rename = "CustomerID")]
+    pub CustomerID: String,
+    #[serde(rename = "CustomerName")]
+    pub CustomerName: String,
+    #[serde(rename = "PaymentName")]
+    pub PaymentName: String,
+    #[serde(rename = "VoucherID")]
+    pub VoucherID: String,
+    #[serde(rename = "VoucherQuantity")]
+    pub VoucherQuantity: i32,
+    #[serde(rename = "VoucherAmount")]
+    pub VoucherAmount: f64,
+    #[serde(rename = "VoucherCode")]
+    pub VoucherCode: String,
+    #[serde(rename = "VoucherName")]
+    pub VoucherName: String,
+    #[serde(rename = "CardID")]
+    pub CardID: String,
+    #[serde(rename = "CardName")]
+    pub CardName: String,
+    #[serde(rename = "ApplyVoucherType")]
+    pub ApplyVoucherType: i32,
+    #[serde(rename = "VoucherAllAmount")]
+    pub VoucherAllAmount: f64,
+    #[serde(rename = "VoucherFoodAmount")]
+    pub VoucherFoodAmount: f64,
+    #[serde(rename = "VoucherDrinkAmount")]
+    pub VoucherDrinkAmount: f64,
+    #[serde(rename = "CardNo")]
+    pub CardNo: String,
+    #[serde(rename = "ApprovalCode")]
+    pub ApprovalCode: String,
+    #[serde(rename = "CustomerAddress")]
+    pub CustomerAddress: String,
+    #[serde(rename = "BankName")]
+    pub BankName: String,
+    #[serde(rename = "BankAccountNumber")]
+    pub BankAccountNumber: String,
+    #[serde(rename = "CurrencyID")]
+    pub CurrencyID: String,
+    #[serde(rename = "MainCurrency")]
+    pub MainCurrency: String,
+    #[serde(rename = "ExchangeRate")]
+    pub ExchangeRate: f64,
+    #[serde(rename = "ExchangeAmount")]
+    pub ExchangeAmount: f64,
 }

@@ -49,7 +49,6 @@ impl LoginSession {
         let branch_url = format!("https://{}/api/v1/branchs/all", API_DOMAIN);
         let resp = self.api_client.get(branch_url).send().await?;
         let message = resp.text().await?;
-        println!("message: {}", message);
         let result: ServiceResult<Vec<BranchSummary>> = serde_json::from_str(&message)?;
         let branches = result.data.unwrap_or_default();
         Ok(branches)

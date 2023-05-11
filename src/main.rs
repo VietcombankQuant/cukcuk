@@ -1,5 +1,4 @@
-use ::cukcuk::{model::LoginParam, session::LoginSession};
-use chrono::{Datelike, Timelike};
+use ::cukcuk::{model::LoginParam, session::LoginSession, utils};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -14,16 +13,7 @@ async fn main() -> anyhow::Result<()> {
 
     // Get branches
     let branches = session.get_branches().await?;
-    let active_date = {
-        let date = chrono::DateTime::<chrono::Utc>::default();
-        let date = date.with_day(9).unwrap_or_default();
-        let date = date.with_month(5).unwrap_or_default();
-        let date = date.with_year(2023).unwrap_or_default();
-        let date = date.with_hour(0).unwrap_or_default();
-        let date = date.with_minute(0).unwrap_or_default();
-        let date = date.with_second(0).unwrap_or_default();
-        date
-    };
+    let active_date = utils::date_from_parts(2023, 5, 9);
 
     for branch in branches {
         let invoices = session.get_invoices(&branch, active_date).await?;

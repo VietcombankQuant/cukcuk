@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session as SqlSession
 from sqlalchemy.exc import IntegrityError as SqlIntegrityError
 import aiohttp
 import requests
+import pandas as pd
 import json
 from http.client import responses as http_responses
 from typing import Union
@@ -57,6 +58,11 @@ class SqlTableMixin:
             if key in cls.column_names():
                 result.__dict__[key] = value
         return result
+
+    @classmethod
+    def to_df(cls, instances: list, **kwargs) -> pd.DataFrame:
+        records = [instance.to_dict() for instance in instances]
+        return pd.DataFrame(records, **kwargs)
 
     def to_dict(self) -> dict:
         fields = {}

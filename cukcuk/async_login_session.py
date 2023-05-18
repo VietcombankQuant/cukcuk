@@ -4,7 +4,7 @@ import asyncio
 import pytz
 
 from cukcuk.branch import Branch
-from cukcuk.invoice import Invoice
+from cukcuk.invoice import Invoice, InvoiceList
 
 from .branch import Branch
 from .login_session import LoginSession
@@ -37,8 +37,8 @@ class AsyncLoginSession(LoginSession):
 
     async def get_invoices(self, branch: Branch,
                            last_sync_date: datetime = None,
-                           get_details: bool = False) -> list[Invoice]:
-        all_invoices = []
+                           get_details: bool = False) -> InvoiceList:
+        all_invoices = InvoiceList()
         page = 1
         while True:
             invoices = await self.get_invoice_paging(branch, page=page,
@@ -53,7 +53,7 @@ class AsyncLoginSession(LoginSession):
 
     async def get_invoice_paging(self, branch: Branch, page: int, limit: int = 100,
                                  last_sync_date: datetime = None,
-                                 get_details: bool = False) -> list[Invoice]:
+                                 get_details: bool = False) -> InvoiceList:
         url = "/api/v1/sainvoices/paging"
         if last_sync_date == None:
             last_sync_date = datetime.today()
@@ -84,7 +84,8 @@ class AsyncLoginSession(LoginSession):
                     task = self.get_invoice(invoice_ref)
                     tasks.append(task)
 
-        return await asyncio.gather(*tasks)
+        results = await asyncio.gather(*tasks)
+        return InvoiceList(results)
 
     async def get_invoice(self, invoice_ref: str) -> Invoice:
         async with self.api_client() as client:

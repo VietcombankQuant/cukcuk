@@ -7,7 +7,7 @@ import requests
 
 from .common import BASE_URL, handle_response
 from .branch import Branch
-from .invoice import Invoice
+from .invoice import Invoice, InvoiceList
 
 
 class LoginSession:
@@ -55,8 +55,8 @@ class LoginSession:
 
     def get_invoices(self, branch: Branch,
                      last_sync_date: datetime = None,
-                     get_details: bool = False) -> list[Invoice]:
-        all_invoices = []
+                     get_details: bool = False) -> InvoiceList:
+        all_invoices = InvoiceList() 
         page = 1
         while True:
             invoices = self.get_invoice_paging(
@@ -72,7 +72,7 @@ class LoginSession:
     def get_invoice_paging(self, branch: Branch,
                            page: int, limit: int = 100,
                            last_sync_date: datetime = None,
-                           get_details: bool = False) -> list[Invoice]:
+                           get_details: bool = False) -> InvoiceList:
         url = f"{BASE_URL}/api/v1/sainvoices/paging"
         if last_sync_date == None:
             last_sync_date = datetime.today()
@@ -94,7 +94,7 @@ class LoginSession:
             invoices = [Invoice.deserialize(record) for record in records]
             return invoices
 
-        invoices = []
+        invoices = InvoiceList() 
         for record in records:
             invoice_ref = record.get("RefId", "")
             invoice = self.get_invoice(invoice_ref)

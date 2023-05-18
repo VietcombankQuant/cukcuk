@@ -2,7 +2,7 @@ from typing import Any, Union
 from .common import SqlTableBase, SqlTableMixin
 from sqlalchemy.orm import Session as SqlSession, mapped_column, mapped_collection, relationship
 from sqlalchemy import String as SqlString, Boolean as SqlBool, Float as SqlFloat, Integer as SqlInt, ForeignKey
-import json
+import pandas as pd
 
 
 class VATInfo(SqlTableBase, SqlTableMixin):
@@ -265,3 +265,9 @@ class Invoice(SqlTableBase, SqlTableMixin):
                                       for coupon in self.SAInvoiceCoupons]
         fields["SAVATInfo"] = None if self.SAVATInfo == None else self.SAVATInfo.to_dict()
         return fields
+
+
+class InvoiceList(list):
+    def to_df(self, **kwargs) -> pd.DataFrame:
+        records = [obj.to_dict() for obj in self]
+        return pd.DataFrame(records, **kwargs)

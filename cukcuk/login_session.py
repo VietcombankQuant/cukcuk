@@ -78,7 +78,7 @@ class LoginSession:
             "Limit": limit,
             "BranchId": branch.Id,
             "LastSyncDate": last_sync_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "HaveCustomer": True,
+            "HaveCustomer": None,
         }
         resp = self.api_client.post(url, json=payload)
         records = handle_response(resp)

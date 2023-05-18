@@ -1,5 +1,5 @@
 [project]
-name = "cukcuk"
+name = "cukcuk-sdk"
 version = "0.5.0"
 description = "Connect to Cukcuk Shop API"
 authors = [{ name = "Minh Bui", email = "buiducminh287@gmail.com" }]

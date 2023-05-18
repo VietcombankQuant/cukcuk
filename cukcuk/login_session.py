@@ -56,15 +56,18 @@ class LoginSession:
         return branches
 
     def get_invoices(self,
+                     last_sync_date: datetime,
+                     before_date: datetime = None,
                      branch: Union[Branch, None] = None,
-                     last_sync_date: datetime = None,
                      get_details: bool = False) -> InvoiceList:
         all_invoices = InvoiceList()
         page = 1
         while True:
             invoices = self.get_invoice_paging(
-                page=page, branch=branch, 
-                last_sync_date=last_sync_date, 
+                page=page,
+                last_sync_date=last_sync_date,
+                branch=branch,
+                before_date=before_date,
                 get_details=get_details
             )
             if len(invoices) == 0:
@@ -75,17 +78,24 @@ class LoginSession:
         return all_invoices
 
     def get_invoice_paging(self, page: int,
+                           last_sync_date: datetime,
+                           before_date: datetime = None,
                            branch: Union[Branch, None] = None,
                            limit: int = 100,
-                           last_sync_date: datetime = None,
                            get_details: bool = False) -> InvoiceList:
-        url = f"{BASE_URL}/api/v1/sainvoices/paging"
-        if last_sync_date == None:
-            last_sync_date = datetime.today()
+        # Process time
+        local_tz = pytz.timezone('Asia/Ho_Chi_Minh')
 
         if last_sync_date.tzinfo == None:
-            local_tz = pytz.timezone('Asia/Ho_Chi_Minh')
             last_sync_date = last_sync_date.replace(tzinfo=local_tz)
+
+        if before_date == None:
+            before_date = datetime.utcnow()
+        if before_date.tzinfo == None:
+            before_date = before_date.replace(tzinfo=local_tz)
+
+        # Send requests
+        url = f"{BASE_URL}/api/v1/sainvoices/paging"
 
         payload = {
             "Page": page,
@@ -96,15 +106,22 @@ class LoginSession:
         }
         resp = self.api_client.post(url, json=payload)
         records = handle_response(resp)
-        if not get_details:
-            invoices = [Invoice.deserialize(record) for record in records]
-            return invoices
-
         invoices = InvoiceList()
+
         for record in records:
-            invoice_ref = record.get("RefId", "")
-            invoice = self.get_invoice(invoice_ref)
-            invoices.append(invoice)
+            if not get_details:
+                invoice = Invoice.deserialize(record)
+            else:
+                invoice_ref = record.get("RefId", "")
+                invoice = self.get_invoice(invoice_ref)
+
+            try:
+                invoice_date = datetime.fromisoformat(invoice.RefDate)
+            except Exception:
+                invoice_date = datetime.max.replace(tzinfo=local_tz)
+
+            if invoice_date < before_date:
+                invoices.append(invoice)
 
         return invoices
 

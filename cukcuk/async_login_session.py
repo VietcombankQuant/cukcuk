@@ -36,15 +36,17 @@ class AsyncLoginSession(LoginSession):
             return branches
 
     async def get_invoices(self,
+                           last_sync_date: datetime,
+                           before_date: datetime = None,
                            branch: Union[Branch, None] = None,
-                           last_sync_date: datetime = None,
                            get_details: bool = False) -> InvoiceList:
         all_invoices = InvoiceList()
         page = 1
         while True:
             invoices = await self.get_invoice_paging(page=page,
-                                                     branch=branch,
                                                      last_sync_date=last_sync_date,
+                                                     before_date=before_date,
+                                                     branch=branch,
                                                      get_details=get_details)
             if len(invoices) == 0:
                 break
@@ -55,17 +57,25 @@ class AsyncLoginSession(LoginSession):
 
     async def get_invoice_paging(self,
                                  page: int,
+                                 last_sync_date: datetime,
+                                 before_date: datetime = None,
                                  branch: Union[Branch, None] = None,
                                  limit: int = 100,
-                                 last_sync_date: datetime = None,
                                  get_details: bool = False) -> InvoiceList:
-        url = "/api/v1/sainvoices/paging"
-        if last_sync_date == None:
-            last_sync_date = datetime.today()
+        # Process time
+        local_tz = pytz.timezone('Asia/Ho_Chi_Minh')
 
         if last_sync_date.tzinfo == None:
-            local_tz = pytz.timezone('Asia/Ho_Chi_Minh')
             last_sync_date = last_sync_date.replace(tzinfo=local_tz)
+
+        if before_date == None:
+            before_date = datetime.utcnow()
+
+        if before_date.tzinfo == None:
+            before_date = before_date.replace(tzinfo=local_tz)
+
+        # Send requests
+        url = "/api/v1/sainvoices/paging"
 
         payload = {
             "Page": page,
@@ -80,16 +90,26 @@ class AsyncLoginSession(LoginSession):
             records = await handle_response_async(resp)
             if not get_details:
                 invoices = [Invoice.deserialize(record) for record in records]
-                return invoices
+            else:
+                tasks = []
+                for record in records:
+                    invoice_ref = record.get("RefId")
+                    if invoice_ref != None:
+                        task = self.get_invoice(invoice_ref)
+                        tasks.append(task)
+                invoices = await asyncio.gather(*tasks)
 
-            tasks = []
-            for record in records:
-                invoice_ref = record.get("RefId")
-                if invoice_ref != None:
-                    task = self.get_invoice(invoice_ref)
-                    tasks.append(task)
+        # Filter invoices using before date
+        results = []
+        for invoice in invoices:
+            try:
+                invoice_date = datetime.fromisoformat(invoice.RefDate)
+            except Exception:
+                invoice_date = datetime.max.replace(tzinfo=local_tz)
 
-        results = await asyncio.gather(*tasks)
+            if invoice_date <= before_date:
+                results.append(invoice)
+
         return InvoiceList(results)
 
     async def get_invoice(self, invoice_ref: str) -> Invoice:

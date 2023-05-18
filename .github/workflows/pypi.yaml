@@ -15,8 +15,8 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-
       - name: Setup Python
         uses: actions/setup-python@v4.6.0
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

@@ -2,6 +2,7 @@ from typing import Any, Union
 from .common import SqlTableBase, SqlTableMixin
 from sqlalchemy.orm import Session as SqlSession, mapped_column, mapped_collection, relationship
 from sqlalchemy import String as SqlString, Boolean as SqlBool, Float as SqlFloat, Integer as SqlInt, ForeignKey
+import json
 
 
 class VATInfo(SqlTableBase, SqlTableMixin):
@@ -250,3 +251,15 @@ class Invoice(SqlTableBase, SqlTableMixin):
             self.SAVATInfo = VATInfo.deserialize(vat_info_record)
 
         return self
+
+    def __repr__(self) -> str:
+        fields = {}
+        for column in self.column_names():
+            fields[column] = self.__dict__.get(column, None)
+
+        fields["SAInvoiceDetails"] = self.SAInvoiceDetails.__repr__()
+        fields["SAInvoicePayments"] = self.SAInvoicePayments.__repr__() 
+        fields["SAInvoiceCoupons"] = self.SAInvoiceCoupons.__repr__()
+        fields["SAVATInfo"] = self.SAVATInfo.__repr__()
+        result = json.dumps(fields, indent=4)
+        return result

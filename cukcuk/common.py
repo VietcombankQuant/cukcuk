@@ -62,7 +62,7 @@ class SqlTableMixin:
         fields = {}
         for column in self.column_names():
             fields[column] = self.__dict__.get(column, None)
-        result = json.dumps(fields)
+        result = json.dumps(fields, indent=4)
         return result
 
 

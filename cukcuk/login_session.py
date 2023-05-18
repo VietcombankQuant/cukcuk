@@ -53,12 +53,14 @@ class LoginSession:
 
         return branches
 
-    def get_invoices(self, branch: Branch, last_sync_date: datetime = None) -> list[Invoice]:
+    def get_invoices(self, branch: Branch,
+                     last_sync_date: datetime = None,
+                     get_details: bool = False) -> list[Invoice]:
         all_invoices = []
         page = 1
         while True:
             invoices = self.get_invoice_paging(
-                branch, page, last_sync_date=last_sync_date
+                branch, page, last_sync_date=last_sync_date, get_details=get_details
             )
             if len(invoices) == 0:
                 break
@@ -67,7 +69,10 @@ class LoginSession:
 
         return all_invoices
 
-    def get_invoice_paging(self, branch: Branch, page: int, limit: int = 100, last_sync_date: datetime = None) -> list[Invoice]:
+    def get_invoice_paging(self, branch: Branch,
+                           page: int, limit: int = 100,
+                           last_sync_date: datetime = None,
+                           get_details: bool = False) -> list[Invoice]:
         url = f"{BASE_URL}/api/v1/sainvoices/paging"
         if last_sync_date == None:
             last_sync_date = datetime.today()
@@ -85,6 +90,9 @@ class LoginSession:
         }
         resp = self.api_client.post(url, json=payload)
         records = handle_response(resp)
+        if not get_details:
+            invoices = [Invoice.deserialize(record) for record in records]
+            return invoices
 
         invoices = []
         for record in records:

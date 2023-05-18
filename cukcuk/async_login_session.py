@@ -35,11 +35,15 @@ class AsyncLoginSession(LoginSession):
             branches = await asyncio.gather(*tasks)
             return branches
 
-    async def get_invoices(self, branch: Branch, last_sync_date: datetime = None) -> list[Invoice]:
+    async def get_invoices(self, branch: Branch,
+                           last_sync_date: datetime = None,
+                           get_details: bool = False) -> list[Invoice]:
         all_invoices = []
         page = 1
         while True:
-            invoices = await self.get_invoice_paging(branch, page=page, last_sync_date=last_sync_date)
+            invoices = await self.get_invoice_paging(branch, page=page,
+                                                     last_sync_date=last_sync_date,
+                                                     get_details=get_details)
             if len(invoices) == 0:
                 break
             all_invoices.extend(invoices)
@@ -47,7 +51,9 @@ class AsyncLoginSession(LoginSession):
 
         return all_invoices
 
-    async def get_invoice_paging(self, branch: Branch, page: int, limit: int = 100, last_sync_date: datetime = None) -> list[Invoice]:
+    async def get_invoice_paging(self, branch: Branch, page: int, limit: int = 100,
+                                 last_sync_date: datetime = None,
+                                 get_details: bool = False) -> list[Invoice]:
         url = "/api/v1/sainvoices/paging"
         if last_sync_date == None:
             last_sync_date = datetime.today()
@@ -67,6 +73,10 @@ class AsyncLoginSession(LoginSession):
         async with self.api_client() as client:
             resp = await client.post(url, json=payload)
             records = await handle_response_async(resp)
+            if not get_details:
+                invoices = [Invoice.deserialize(record) for record in records]
+                return invoices
+
             tasks = []
             for record in records:
                 invoice_ref = record.get("RefId")

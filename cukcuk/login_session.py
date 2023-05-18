@@ -73,11 +73,16 @@ class LoginSession:
         url = f"{BASE_URL}/api/v1/sainvoices/paging"
         if last_sync_date == None:
             last_sync_date = datetime.today()
+
+        if last_sync_date.tzinfo == None:
+            local_tz = pytz.timezone('Asia/Ho_Chi_Minh')
+            last_sync_date = last_sync_date.replace(tzinfo=local_tz)
+
         payload = {
             "Page": page,
             "Limit": limit,
             "BranchId": branch.Id,
-            "LastSyncDate": last_sync_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "LastSyncDate": last_sync_date.isoformat(),
             "HaveCustomer": None,
         }
         resp = self.api_client.post(url, json=payload)

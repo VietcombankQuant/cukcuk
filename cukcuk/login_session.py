@@ -9,6 +9,8 @@ from .common import BASE_URL, handle_response
 from .branch import Branch
 from .invoice import Invoice, InvoiceList
 
+from typing import Union
+
 
 class LoginSession:
     def __init__(self, *, app_id, domain, secret_key):
@@ -53,14 +55,17 @@ class LoginSession:
 
         return branches
 
-    def get_invoices(self, branch: Branch,
+    def get_invoices(self,
+                     branch: Union[Branch, None] = None,
                      last_sync_date: datetime = None,
                      get_details: bool = False) -> InvoiceList:
-        all_invoices = InvoiceList() 
+        all_invoices = InvoiceList()
         page = 1
         while True:
             invoices = self.get_invoice_paging(
-                branch, page, last_sync_date=last_sync_date, get_details=get_details
+                page=page, branch=branch, 
+                last_sync_date=last_sync_date, 
+                get_details=get_details
             )
             if len(invoices) == 0:
                 break
@@ -69,8 +74,9 @@ class LoginSession:
 
         return all_invoices
 
-    def get_invoice_paging(self, branch: Branch,
-                           page: int, limit: int = 100,
+    def get_invoice_paging(self, page: int,
+                           branch: Union[Branch, None] = None,
+                           limit: int = 100,
                            last_sync_date: datetime = None,
                            get_details: bool = False) -> InvoiceList:
         url = f"{BASE_URL}/api/v1/sainvoices/paging"
@@ -84,7 +90,7 @@ class LoginSession:
         payload = {
             "Page": page,
             "Limit": limit,
-            "BranchId": branch.Id,
+            "BranchId": branch.Id if branch != None else None,
             "LastSyncDate": last_sync_date.isoformat(),
             "HaveCustomer": None,
         }
@@ -94,7 +100,7 @@ class LoginSession:
             invoices = [Invoice.deserialize(record) for record in records]
             return invoices
 
-        invoices = InvoiceList() 
+        invoices = InvoiceList()
         for record in records:
             invoice_ref = record.get("RefId", "")
             invoice = self.get_invoice(invoice_ref)

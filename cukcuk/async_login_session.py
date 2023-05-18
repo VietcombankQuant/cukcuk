@@ -3,12 +3,12 @@ import aiohttp
 import asyncio
 import pytz
 
-from cukcuk.branch import Branch
-from cukcuk.invoice import Invoice, InvoiceList
-
 from .branch import Branch
+from .invoice import Invoice, InvoiceList
 from .login_session import LoginSession
 from .common import BASE_URL, handle_response_async
+
+from typing import Union
 
 
 class AsyncLoginSession(LoginSession):
@@ -35,13 +35,15 @@ class AsyncLoginSession(LoginSession):
             branches = await asyncio.gather(*tasks)
             return branches
 
-    async def get_invoices(self, branch: Branch,
+    async def get_invoices(self,
+                           branch: Union[Branch, None] = None,
                            last_sync_date: datetime = None,
                            get_details: bool = False) -> InvoiceList:
         all_invoices = InvoiceList()
         page = 1
         while True:
-            invoices = await self.get_invoice_paging(branch, page=page,
+            invoices = await self.get_invoice_paging(page=page,
+                                                     branch=branch,
                                                      last_sync_date=last_sync_date,
                                                      get_details=get_details)
             if len(invoices) == 0:
@@ -51,7 +53,10 @@ class AsyncLoginSession(LoginSession):
 
         return all_invoices
 
-    async def get_invoice_paging(self, branch: Branch, page: int, limit: int = 100,
+    async def get_invoice_paging(self,
+                                 page: int,
+                                 branch: Union[Branch, None] = None,
+                                 limit: int = 100,
                                  last_sync_date: datetime = None,
                                  get_details: bool = False) -> InvoiceList:
         url = "/api/v1/sainvoices/paging"
@@ -65,9 +70,9 @@ class AsyncLoginSession(LoginSession):
         payload = {
             "Page": page,
             "Limit": limit,
-            "BranchId": branch.Id,
+            "BranchId": branch.Id if branch != None else None,
             "LastSyncDate": last_sync_date.isoformat(),
-            # "HaveCustomer": None,
+            "HaveCustomer": None,
         }
 
         async with self.api_client() as client:

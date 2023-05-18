@@ -252,7 +252,7 @@ class Invoice(SqlTableBase, SqlTableMixin):
 
         return self
 
-    def __repr__(self) -> str:
+    def to_dict(self) -> dict:
         fields = {}
         for column in self.column_names():
             fields[column] = self.__dict__.get(column, None)
@@ -264,5 +264,4 @@ class Invoice(SqlTableBase, SqlTableMixin):
         fields["SAInvoiceCoupons"] = [coupon.to_dict()
                                       for coupon in self.SAInvoiceCoupons]
         fields["SAVATInfo"] = None if self.SAVATInfo == None else self.SAVATInfo.to_dict()
-        result = json.dumps(fields, indent=4)
-        return result
+        return fields

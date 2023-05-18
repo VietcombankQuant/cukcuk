@@ -3,4 +3,4 @@ name = "cukcuk"
 version = "0.4.5"
 description = "Connect to Cukcuk Shop API"
 authors = [{ name = "Minh Bui", email = "buiducminh287@gmail.com" }]
-dependencies = ["requests >= 2", "sqlalchemy >= 2", "pytz"]
+dependencies = ["aiohttp >= 3.8", "requests >= 2", "sqlalchemy >= 2", "pytz"]

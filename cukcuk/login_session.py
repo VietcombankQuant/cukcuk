@@ -54,14 +54,12 @@ class LoginSession:
         return branches
 
     def get_invoices(self, branch: Branch, last_sync_date: datetime = None) -> list[Branch]:
-        if last_sync_date == None:
-            last_sync_date = datetime.today()
-
         all_invoices = []
         page = 1
         while True:
             invoices = self.get_invoice_paging(
-                branch, page, last_sync_date=last_sync_date)
+                branch, page, last_sync_date=last_sync_date
+            )
             if len(invoices) == 0:
                 break
             all_invoices.extend(invoices)

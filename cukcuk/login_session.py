@@ -53,7 +53,7 @@ class LoginSession:
 
         return branches
 
-    def get_invoices(self, branch: Branch, last_sync_date: datetime = None) -> list[Branch]:
+    def get_invoices(self, branch: Branch, last_sync_date: datetime = None) -> list[Invoice]:
         all_invoices = []
         page = 1
         while True:
@@ -67,7 +67,7 @@ class LoginSession:
 
         return all_invoices
 
-    def get_invoice_paging(self, branch: Branch, page: int, limit: int = 100, last_sync_date: datetime = None) -> list[Branch]:
+    def get_invoice_paging(self, branch: Branch, page: int, limit: int = 100, last_sync_date: datetime = None) -> list[Invoice]:
         url = f"{BASE_URL}/api/v1/sainvoices/paging"
         if last_sync_date == None:
             last_sync_date = datetime.today()

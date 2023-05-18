@@ -28,6 +28,5 @@ jobs:
           python -m build
 
       - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://upload.pypi.org/legacy/
+        uses: pypa/gh-action-pypi-publish@v1.8.6
+

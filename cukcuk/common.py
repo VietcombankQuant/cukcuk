@@ -58,10 +58,14 @@ class SqlTableMixin:
                 result.__dict__[key] = value
         return result
 
-    def __repr__(self) -> str:
+    def to_dict(self) -> dict:
         fields = {}
         for column in self.column_names():
             fields[column] = self.__dict__.get(column, None)
+        return fields
+
+    def __repr__(self) -> str:
+        fields = self.to_dict()
         result = json.dumps(fields, indent=4)
         return result
 

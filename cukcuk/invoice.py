@@ -257,9 +257,12 @@ class Invoice(SqlTableBase, SqlTableMixin):
         for column in self.column_names():
             fields[column] = self.__dict__.get(column, None)
 
-        fields["SAInvoiceDetails"] = self.SAInvoiceDetails.__repr__()
-        fields["SAInvoicePayments"] = self.SAInvoicePayments.__repr__() 
-        fields["SAInvoiceCoupons"] = self.SAInvoiceCoupons.__repr__()
-        fields["SAVATInfo"] = self.SAVATInfo.__repr__()
+        fields["SAInvoiceDetails"] = [detail.to_dict()
+                                      for detail in self.SAInvoiceDetails]
+        fields["SAInvoicePayments"] = [payment.to_dict()
+                                       for payment in self.SAInvoicePayments]
+        fields["SAInvoiceCoupons"] = [coupon.to_dict()
+                                      for coupon in self.SAInvoiceCoupons]
+        fields["SAVATInfo"] = None if self.SAVATInfo == None else self.SAVATInfo.to_dict()
         result = json.dumps(fields, indent=4)
         return result

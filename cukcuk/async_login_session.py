@@ -1,6 +1,7 @@
 from datetime import datetime
 import aiohttp
 import asyncio
+import pytz
 
 from cukcuk.branch import Branch
 from cukcuk.invoice import Invoice
@@ -34,10 +35,7 @@ class AsyncLoginSession(LoginSession):
             branches = await asyncio.gather(*tasks)
             return branches
 
-    async def get_invoices(self, branch: Branch, last_sync_date: datetime = None) -> list[Branch]:
-        if last_sync_date == None:
-            last_sync_date = datetime.today()
-
+    async def get_invoices(self, branch: Branch, last_sync_date: datetime = None) -> list[Invoice]:
         all_invoices = []
         page = 1
         while True:
@@ -49,16 +47,21 @@ class AsyncLoginSession(LoginSession):
 
         return all_invoices
 
-    async def get_invoice_paging(self, branch: Branch, page: int, limit: int = 100, last_sync_date: datetime = None) -> list[Branch]:
+    async def get_invoice_paging(self, branch: Branch, page: int, limit: int = 100, last_sync_date: datetime = None) -> list[Invoice]:
         url = "/api/v1/sainvoices/paging"
         if last_sync_date == None:
             last_sync_date = datetime.today()
+
+        if last_sync_date.tzinfo == None:
+            local_tz = pytz.timezone('Asia/Ho_Chi_Minh')
+            last_sync_date = last_sync_date.replace(tzinfo=local_tz)
+
         payload = {
             "Page": page,
             "Limit": limit,
             "BranchId": branch.Id,
-            "LastSyncDate": last_sync_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "HaveCustomer": "true",
+            "LastSyncDate": last_sync_date.isoformat(),
+            # "HaveCustomer": None,
         }
 
         async with self.api_client() as client:
@@ -80,12 +83,6 @@ class AsyncLoginSession(LoginSession):
             resp = await client.get(url)
             record = await handle_response_async(resp)
 
-            # get detail info of invoice
-            url = f"/api/v1/sainvoices/detail/{invoice_ref}"
-            resp = await client.get(url)
-            details = await handle_response_async(resp)
-
-        record.update(details)
         invoice = Invoice.deserialize(record)
         return invoice
 

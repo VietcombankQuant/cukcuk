@@ -1,1 +1,15 @@
-### Cukcuk SDK
+## Cukcuk SDK
+
+### Examples:
+1. Get all invoices in a date range
+```python
+import cukcuk
+from datetime import datetime, timedelta
+
+session = cukcuk.LoginSession.from_json("login.json")
+last_sync_date = datetime(2023, 5, 1)
+before_date = datetime(2023, 5, 5)
+invoices = session.get_invoices(last_sync_date=last_sync_date, before_date=before_date)
+df = invoices.to_df() # Convert to pandas DataFrame
+print(df)
+```

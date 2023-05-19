@@ -1,4 +1,4 @@
-name: "Upload to PyPI"
+name: "Build wheel package and upload to PyPI"
 
 on:
   push:

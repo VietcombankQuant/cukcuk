@@ -4,4 +4,4 @@ from .branch import Branch
 from .invoice import Invoice, InvoiceList, InvoiceDetail, InvoicePayment, InvoiceCoupon
 from .storage import Storage
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"

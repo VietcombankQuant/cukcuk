@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: release
-      url: https://pypi.org/p/cukcuk-sdk
+      url: https://pypi.org/p/cukcuk
     permissions:
       id-token: write
     steps:
@@ -30,4 +30,4 @@ jobs:
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@v1.8.6
         with:
-          password: ${{secrets.PYPI_CUKCUK_SDK_TOKEN}}
+          password: ${{secrets.PYPI_CUKCUK_TOKEN}}

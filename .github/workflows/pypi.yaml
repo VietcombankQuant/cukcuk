@@ -29,5 +29,3 @@ jobs:
 
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@v1.8.6
-        with:
-          password: ${{secrets.PYPI_CUKCUK_TOKEN}}
